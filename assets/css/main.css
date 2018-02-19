@@ -1985,7 +1985,7 @@
 			.button.special:hover {
 				background-color: #fff;
 				color: #16ADE1 !important;
-				border: 1px solid #fff;
+				border: 1px solid #16ADE1;
 			}
 
 			input[type="submit"].special:active,
@@ -1995,7 +1995,7 @@
 			.button.special:active {
 				background-color: #fff;
 				color: #16ADE1 !important;
-				border: 1px solid #fff;
+				border: 1px solid #16ADE1;
 				opacity: 0.7;
 			}
 
@@ -2887,7 +2887,7 @@
 					.wrapper.style1 .button.special:hover {
 						background-color: #fff;
 						color: #16ADE1 !important;
-						border: 1px solid #fff;
+						border: 1px solid #16ADE1 !important;
 					}
 
 					.wrapper.style1 input[type="submit"].special:active,
@@ -2897,7 +2897,7 @@
 					.wrapper.style1 .button.special:active {
 						background-color: #fff;
 						color: #16ADE1 !important;
-						border: 1px solid #fff;
+						border: 1px solid #16ADE1 !important;
 						opacity: 0.7;
 					}
 
@@ -3112,7 +3112,7 @@
 					.wrapper.style2 .button.special:hover {
 						background-color: #fff;
 						color: #16ADE1 !important;
-						border: 1px solid #fff;
+						border: 1px solid #16ADE1 !important;
 					}
 
 					.wrapper.style2 input[type="submit"].special:active,
@@ -3122,7 +3122,7 @@
 					.wrapper.style2 .button.special:active {
 						background-color: #fff;
 						color: #16ADE1 !important;
-						border: 1px solid #fff;
+						border: 1px solid #16ADE1 !important;
 						opacity: 0.7;
 					}
 
@@ -3353,7 +3353,7 @@
 					.wrapper.style3 .button.special:hover {
 						background-color: #fff;
 						color: #16ADE1 !important;
-						border: 1px solid #fff;
+						border: 1px solid #16ADE1 !important;
 					}
 
 					.wrapper.style3 input[type="submit"].special:active,
@@ -3363,7 +3363,7 @@
 					.wrapper.style3 .button.special:active {
 						background-color: #fff;
 						color: #16ADE1 !important;
-						border: 1px solid #fff;
+						border: 1px solid #16ADE1 !important;
 						opacity: 0.7;
 					}
 
@@ -3643,7 +3643,7 @@
 				#banner .button.special:hover {
 					background-color: #fff;
 					color: #16ADE1 !important;
-					border: 1px solid #fff;
+					border: 1px solid #16ADE1 !important;
 				}
 
 				#banner input[type="submit"].special:active,
@@ -3653,7 +3653,7 @@
 				#banner .button.special:active {
 					background-color: #fff;
 					color: #16ADE1 !important;
-					border: 1px solid #fff;
+					border: 1px solid #16ADE1 !important;
 					opacity: 0.7;
 				}
 
