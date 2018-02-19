@@ -55,10 +55,34 @@
 
 				<h2 id="content">Sample Code</h2>
 				<p>
-					Simply decorate your request with the correct headers (apipublickey and apihashedkey) and pass over the relevant bitid
+					Simply decorate your request with the correct headers (apipublickey and apihashedkey) and pass over the relevant bitid.
+				</p>
+				<p>
+					The code below accepts a POST request via an express endpoint. The apipublickey and apiprivatekey are stored in config. 
 				</p>
 				<pre>
 					<code>
+'use strict';
+const express = require('express');
+const router = express.Router();
+const request = require('request');
+const config = require('../config/config');
+const bcrypt = require('bcrypt');
+
+function hashTheCode(privatekey) {
+	return new Promise((resolve, reject) => {
+		bcrypt.genSalt(10, (err, salt) => {
+			bcrypt.hash(privatekey, salt, (err, apihashedkey) => {
+					if (err) {
+							return reject(err);
+					} else {
+							return resolve(apihashedkey);
+					}
+			});
+		});
+	});
+};
+					
 router.post('/', (req, res) => {
 	let bitid = req.body.bitid;
 	if (!bitid) {
@@ -68,7 +92,7 @@ router.post('/', (req, res) => {
 		});
 	}
 
-	addBitHeaders.hashKey(config.apiprivatekey)
+	hashTheCode(config.apiprivatekey)
 	.then((apihashedkey) => {
 		let params = {
 			url : config.urlToBit + '/organisations/users/' + bitid,
@@ -97,6 +121,8 @@ router.post('/', (req, res) => {
 		});
 	});
 });
+
+module.exports = router;
 					</code>
 				</pre>
 				
