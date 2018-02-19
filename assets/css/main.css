@@ -1983,7 +1983,9 @@
 			input[type="button"].special:hover,
 			button.special:hover,
 			.button.special:hover {
-				background-color: #00e6e9;
+				background-color: #fff;
+				color: #16ADE1 !important;
+				border: 1px solid #fff;
 			}
 
 			input[type="submit"].special:active,
@@ -1991,7 +1993,10 @@
 			input[type="button"].special:active,
 			button.special:active,
 			.button.special:active {
-				background-color: #00b4b5;
+				background-color: #fff;
+				color: #16ADE1 !important;
+				border: 1px solid #fff;
+				opacity: 0.7;
 			}
 
 /* Form */
@@ -2870,8 +2875,9 @@
 				.wrapper.style1 input[type="button"].special,
 				.wrapper.style1 button.special,
 				.wrapper.style1 .button.special {
-					background-color: #009a9c;
+					background-color: #16ADE1;
 					color: #fff !important;
+					border: 1px solid #fff;
 				}
 
 					.wrapper.style1 input[type="submit"].special:hover,
@@ -2879,7 +2885,9 @@
 					.wrapper.style1 input[type="button"].special:hover,
 					.wrapper.style1 button.special:hover,
 					.wrapper.style1 .button.special:hover {
-						background-color: #00b4b5;
+						background-color: #fff;
+						color: #16ADE1 !important;
+						border: 1px solid #fff;
 					}
 
 					.wrapper.style1 input[type="submit"].special:active,
@@ -2887,7 +2895,10 @@
 					.wrapper.style1 input[type="button"].special:active,
 					.wrapper.style1 button.special:active,
 					.wrapper.style1 .button.special:active {
-						background-color: #008183;
+						background-color: #fff;
+						color: #16ADE1 !important;
+						border: 1px solid #fff;
+						opacity: 0.7;
 					}
 
 			.wrapper.style1 label {
@@ -3001,7 +3012,7 @@
 			}
 
 				.wrapper.style1 .feature .fa {
-					color: #009a9c;
+					color: #16ADE1;
 				}
 
 		.wrapper.style2 {
@@ -3099,7 +3110,9 @@
 					.wrapper.style2 input[type="button"].special:hover,
 					.wrapper.style2 button.special:hover,
 					.wrapper.style2 .button.special:hover {
-						background-color: #00e6e9;
+						background-color: #fff;
+						color: #16ADE1 !important;
+						border: 1px solid #fff;
 					}
 
 					.wrapper.style2 input[type="submit"].special:active,
@@ -3107,7 +3120,10 @@
 					.wrapper.style2 input[type="button"].special:active,
 					.wrapper.style2 button.special:active,
 					.wrapper.style2 .button.special:active {
-						background-color: #00b4b5;
+						background-color: #fff;
+						color: #16ADE1 !important;
+						border: 1px solid #fff;
+						opacity: 0.7;
 					}
 
 			.wrapper.style2 label {
@@ -3225,7 +3241,7 @@
 				}
 
 		.wrapper.style3 {
-			background-color: #009a9c;
+			background-color: #16ADE1;
 			color: #ddd;
 		}
 
@@ -3335,7 +3351,9 @@
 					.wrapper.style3 input[type="button"].special:hover,
 					.wrapper.style3 button.special:hover,
 					.wrapper.style3 .button.special:hover {
-						background-color: #00e6e9;
+						background-color: #fff;
+						color: #16ADE1 !important;
+						border: 1px solid #fff;
 					}
 
 					.wrapper.style3 input[type="submit"].special:active,
@@ -3343,7 +3361,10 @@
 					.wrapper.style3 input[type="button"].special:active,
 					.wrapper.style3 button.special:active,
 					.wrapper.style3 .button.special:active {
-						background-color: #00b4b5;
+						background-color: #fff;
+						color: #16ADE1 !important;
+						border: 1px solid #fff;
+						opacity: 0.7;
 					}
 
 			.wrapper.style3 label {
@@ -3610,8 +3631,9 @@
 			#banner input[type="button"].special,
 			#banner button.special,
 			#banner .button.special {
-				background-color: #009a9c;
+				background-color: #16ADE1;
 				color: #fff !important;
+				border: 1px solid #fff;
 			}
 
 				#banner input[type="submit"].special:hover,
@@ -3619,7 +3641,9 @@
 				#banner input[type="button"].special:hover,
 				#banner button.special:hover,
 				#banner .button.special:hover {
-					background-color: #00b4b5;
+					background-color: #fff;
+					color: #16ADE1 !important;
+					border: 1px solid #fff;
 				}
 
 				#banner input[type="submit"].special:active,
@@ -3627,7 +3651,10 @@
 				#banner input[type="button"].special:active,
 				#banner button.special:active,
 				#banner .button.special:active {
-					background-color: #008183;
+					background-color: #fff;
+					color: #16ADE1 !important;
+					border: 1px solid #fff;
+					opacity: 0.7;
 				}
 
 		#banner h2 {
