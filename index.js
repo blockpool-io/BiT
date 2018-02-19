@@ -19,6 +19,7 @@ app.use("/assets", express.static(__dirname + '/assets'));
 
 app.use('/associate', require('./routes/associate'));
 app.use('/query_account', require('./routes/query_account'));
+app.use('/create_wallet', require('./routes/create_wallet'));
 
 app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, 'index.html'))

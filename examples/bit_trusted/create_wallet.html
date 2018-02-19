@@ -1,0 +1,173 @@
+<!DOCTYPE HTML>
+<!--
+	Typify by TEMPLATED
+	templated.co @templatedco
+	Released for free under the Creative Commons Attribution 3.0 license (templated.co/license)
+-->
+<html>
+	<head>
+		<title>Create a Wallet on an Associated Account</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<!--[if lte IE 8]><script src="../../assets/js/ie/html5shiv.js"></script><![endif]-->
+		<link rel="stylesheet" href="../../assets/css/main.css" />
+		<!--[if lte IE 9]><link rel="stylesheet" href="../../assets/css/ie9.css" /><![endif]-->
+	</head>
+	<body>
+	<!-- Banner -->
+		<section id="banner">
+			<h2><strong>Create a Wallet</strong> on an Associated Account</h2>
+			<p>BiT Trusted</p>
+			<ul class="actions">
+				<li><a href="#demo" class="button special">Working Demo</a></li>
+				<li><a href="#code" class="button special">Sample Code</a></li>
+				<li><a href="#contract" class="button special">Contract</a></li>
+			</ul>
+			<a href="../../index.html#trusted" class="button alt">Go Back</a>
+		</section>
+
+	<!-- Demo -->
+		<section id="demo" class="wrapper style2 special">
+			<div class="inner narrow">
+				<header>
+					<h2>Create a Wallet</h2>
+				</header>
+				<form class="grid-form" method="post" action="/create_wallet">
+					<div class="form-control narrow">
+						<label for="ticker">Currency</label>
+						<div class="select-wrapper">
+							<select name="ticker" id="ticker">
+								<option value="BPL">Blockpool</option>
+								<option value="BTC">Bitcoin</option>
+								<option value="WBX">WOOOBux</option>
+							</select>
+						</div>
+					</div>
+					<div class="form-control narrow">
+						<label for="bitid">bitid</label>
+						<input name="bitid" id="bitid" type="bitid">
+					</div>
+					<ul class="actions">
+						<li><input value="Create Wallet" type="submit"></li>
+					</ul>
+				</form>
+			</div>
+		</section>
+
+	<!-- Code -->
+		
+		<section id="code" class="wrapper">
+			<div class="inner">
+
+				<h2 id="content">Sample Code</h2>
+				<p>
+					Simply decorate your request with the correct headers (apipublickey and apihashedkey) and plug in the correct ticker and bitid.
+				</p>
+				<pre>
+					<code>
+router.post('/', (req, res) => {
+  let bitid = req.body.bitid;
+  let ticker = req.body.ticker;
+  if (!bitid || !ticker) {
+      return res.status(400).json({
+      success : false,
+      message : "missing required fields"
+    });
+  }
+
+  addBitHeaders.hashKey(config.apiprivatekey)
+  .then((apihashedkey) => {
+    let params = {
+      url : config.urlToBit + '/organisations/wallets/' + ticker.toLowerCase(),
+      headers : {
+        apipublickey : config.apipublickey,
+        apihashedkey : apihashedkey
+      },
+      json : true,
+      body : {
+        bitid : bitid
+      }
+    };
+
+    request.post(params, (error, response, body) => {
+      if (error) {
+        let statusCode = 500;
+        if (response) {
+          statusCode = response.statusCode;
+        }
+        return res.status(statusCode).json({
+          success : false,
+          message: error,message
+       });
+      } else {
+        return res.status(response.statusCode).json(body);
+      }
+    });
+  })
+  .catch((err) => {
+    return res.status(401).json({
+      success : false,
+      message: err.message
+    });
+  });
+});
+					</code>
+				</pre>
+				
+			</div>
+		</section>
+		<hr />
+	<!-- Contract -->
+			
+		<section id="contract" class="wrapper">
+			<div class="inner">
+
+				<h2 id="content">Contract</h2>
+				
+				<h3>Request</h3>
+				<pre>
+					<code>
+POST -> https://test.bit.blockpool.io/organisations/wallets/:ticker
+
+{
+  bitid: 'the user id collected by the call above'
+}
+					</code>
+				</pre>
+				<h3>Response</h3>
+				<pre>
+					<code>
+{
+  success : true,
+  walletid : 'the unique id for this wallet'
+}
+					</code>
+				</pre>
+			</div>
+		</section>
+
+		<hr />
+
+		<section class="wrapper special">
+				<div class="inner">
+					<a href="../../index.html#trusted" class="button alt">Go Back</a>
+				</div>
+		</section>
+		
+
+		<!-- Footer -->
+        <footer id="footer">
+            <div class="copyright">
+                &copy; Blockpool Samples. Design: <a href="http://templated.co/">TEMPLATED</a>.
+            </div>
+        </footer>
+
+		<!-- Scripts -->
+			<script src="../../assets/js/jquery.min.js"></script>
+			<script src="../../assets/js/skel.min.js"></script>
+			<script src="../../assets/js/util.js"></script>
+			<!--[if lte IE 8]><script src="../assets/js/ie/respond.min.js"></script><![endif]-->
+			<script src="../../assets/js/main.js"></script>
+
+	</body>
+</html>
