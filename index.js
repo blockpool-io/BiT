@@ -14,13 +14,13 @@ app.options('*', cors()) // include before other routes
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-app.use("/samples", express.static(__dirname + '/samples'));
+app.use("/examples", express.static(__dirname + '/examples'));
 app.use("/assets", express.static(__dirname + '/assets'));
 
 app.use('/associate', require('./routes/associate'));
 
 app.get('*', (req, res) => {
-    res.sendfile(path.join(__dirname, 'index.html'))
+    res.sendFile(path.join(__dirname, 'index.html'))
 });
 
 app.listen(port);

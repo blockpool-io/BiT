@@ -1,0 +1,160 @@
+<!DOCTYPE HTML>
+<!--
+	Based on Typify by TEMPLATED
+	templated.co @templatedco
+	Released for free under the Creative Commons Attribution 3.0 license (templated.co/license)
+-->
+<html>
+	<head>
+		<title>BiT Examples</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<!--[if lte IE 8]><script src="assets/js/ie/html5shiv.js"></script><![endif]-->
+		<link rel="stylesheet" href="assets/css/main.css" />
+		<!--[if lte IE 9]><link rel="stylesheet" href="assets/css/ie9.css" /><![endif]-->
+	</head>
+	<body>
+
+		<!-- Banner -->
+			<section id="banner">
+				<h2><strong>Documentation</strong> and Working Exampls of BiT</h2>
+				<p>Brought to you by Blockpool</p>
+				<ul class="actions">
+					<li><a href="#intro" class="button special">Get started</a></li>
+				</ul>
+			</section>
+
+			<section id="intro" class="wrapper special">
+				<div class="inner">
+					<header class="major">
+						<h2>Introduction</h2>
+					</header>
+					<p>
+						BiT is a ReSTful JSON API that allows anyone to quickly and easily integrate their existing systems with the blockchain.
+					</p>
+					<p>
+						Within these pages you can find documentation, simple code snippets and working examples to speed your integration and also help you understand the 
+						scope and utility of BiT.
+					</p> 
+    			</div>
+			</section>
+
+			<section id="howtouse" class="wrapper style2">
+				<div class="inner">
+					<header class="major">
+						<h2>How to use this guide</h2>
+					</header>
+					<p>
+						There are two ways you can use BiT. This is explained in the section below. Within each section is a list of the functional
+						"plugins" that are available. Just click through to the area you are interested in. The working samples integrate with the
+						Blockpool test system.
+					</p>                  
+    			</div>
+			</section>
+
+			<section id="howtouse" class="wrapper">
+				<div class="inner">
+					<h3>BiT Authenticated</h3>
+					<p>
+						With BiT Authenticated the BiT is responsible for everything.
+					</p>
+					<p>
+						It holds user details, manages and maintains passwords and will even act as an authentication engine for your own application, providing
+						a JWT on login that you can use to decorate requests to BiT and also validate (using standard JWT) requests to your own API.
+					</p>
+					<p>
+						<a href="#authenticated" class="button alt icon fa-key">Use BiT Authenticated</a>
+					</p>
+					<h3>BiT Trusted</h3>
+					<p>
+						biT Trusted is ideal if you already have authentication and want to integrate BiT seamlessly with your existing system.
+					</p>
+					<p>
+						In this case your user provides their permission for BiT to trust your requests for resources that you have permission for. Once trust
+						has been established between your user and us you will be able to act without asking again. Of course the user can revoke this
+						trust and we encourage you to offer that option via your own interface though the user will always be able to use our own myBlockpool
+						interface to do this.
+					</p>
+					<p>
+						<a href="#trusted" class="button alt icon fa-key">Use BiT Trusted</a>
+					</p>
+    			</div>
+			</section>
+
+			<section id="authenticated" class="wrapper special">
+				<div class="inner">
+					<header class="major">
+						<h2>BiT Authenticated</h2>
+					</header>
+					<p>
+						Coming soon...
+					</p>
+				</div>
+			</section>
+			<hr />
+			<section id="trusted" class="wrapper special">
+				<div class="inner">
+					<header class="major">
+						<h2>BiT Trusted</h2>
+					</header>
+					<div class="features">
+						<div class="feature">
+							<i class="fa fa-diamond"></i>
+							<h3></h3>
+							<p>Allow one of your users to tell us to trust you.</p>
+							<ul class="actions">
+								<li><a href="examples/interactingasanorganisation/associate.html" class="button special">See Sample</a></li>
+							</ul>
+						</div>
+						<div class="feature">
+							<i class="fa fa-copy"></i>
+							<h3>Query for accounts</h3>
+							<p>Get details about an account that has trust between you and us.</p>
+							<ul class="actions">
+								<li><a href="#one" class="button special">See Sample</a></li>
+							</ul>
+						</div>
+						<div class="feature">
+							<i class="fa fa-paper-plane-o"></i>
+							<h3>Create a wallet</h3>
+							<p>Create a crypto-currency wallet, for any of our supported currencies, for a trusted user.</p>
+							<ul class="actions">
+								<li><a href="#one" class="button special">See Sample</a></li>
+							</ul>
+						</div>
+						<div class="feature">
+							<i class="fa fa-bitcoin"></i>
+							<h3>Query balance</h3>
+							<p>Query the balance of a wallet associated with your Organisation</p>
+							<ul class="actions">
+								<li><a href="#one" class="button special">See Sample</a></li>
+							</ul>
+						</div>
+						<div class="feature">
+							<i class="fa fa-envelope-o"></i>
+							<h3>Send funds</h3>
+							<p>Send funds, either to another associated wallet, or any valid address</p>
+							<ul class="actions">
+								<li><a href="#one" class="button special">See Sample</a></li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</section>
+
+		<!-- Footer -->
+			<footer id="footer">
+				<div class="copyright">
+					&copy; Blockpool Samples. Design: <a href="http://templated.co/">TEMPLATED</a>.
+				</div>
+			</footer>
+
+		<!-- Scripts -->
+			<script src="assets/js/jquery.min.js"></script>
+			<script src="assets/js/skel.min.js"></script>
+			<script src="assets/js/util.js"></script>
+			<!--[if lte IE 8]><script src="assets/js/ie/respond.min.js"></script><![endif]-->
+			<script src="assets/js/main.js"></script>
+
+	</body>
+</html>
