@@ -41,6 +41,8 @@ dist.zip
 # Typescript v1 declaration files
 typings/
 
+.vscode
+
 # Optional npm cache directory
 .npm
 

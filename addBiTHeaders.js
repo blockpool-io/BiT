@@ -14,6 +14,6 @@ function hashKey(privatekey) {
                     return resolve(apihashedkey);
                 }
             });
-        }); 
+        });
     });
 };
