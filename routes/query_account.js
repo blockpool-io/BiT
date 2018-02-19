@@ -6,9 +6,8 @@ const config = require('../config/config');
 const addBitHeaders = require('../addBiTHeaders');
 
 router.post('/', (req, res) => {
-    let email = req.body.email;
-    let password = req.body.password;
-    if (!email || !password) {
+    let bitid = req.body.bitid;
+    if (!bitid) {
         return res.status(400).json({
             success : false,
             message : "missing required fields"
@@ -18,16 +17,15 @@ router.post('/', (req, res) => {
     addBitHeaders.hashKey(config.apiprivatekey)
     .then((apihashedkey) => {
         let params = {
-            url : config.urlToBit + '/organisations/users',
+            url : config.urlToBit + '/organisations/users/' + bitid,
             headers : {
                 apipublickey : config.apipublickey,
                 apihashedkey : apihashedkey
             },
-            json : true,
-            body : req.body
+            json : true
         };
     
-        request.post(params, (error, response, body) => {
+        request.get(params, (error, response, body) => {
             if (error) {
                 let statusCode = 500;
                 if (response) {

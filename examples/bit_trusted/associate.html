@@ -23,6 +23,7 @@
 				<li><a href="#code" class="button special">Sample Code</a></li>
 				<li><a href="#contract" class="button special">Contract</a></li>
 			</ul>
+			<a href="../../index.html#trusted" class="button alt">Go Back</a>
 		</section>
 
 	<!-- Demo -->
@@ -52,7 +53,7 @@
 		<section id="code" class="wrapper">
 			<div class="inner">
 
-				<h2 id="content">Associate Account - sample code</h2>
+				<h2 id="content">Sample Code</h2>
 				<p>
 					Simply decorate your request with the correct headers (apipublickey and apihashedkey) and pass over the email address and password
 					you have collected
@@ -60,57 +61,57 @@
 				<pre>
 					<code>
 router.post('/', (req, res) => {
-let email = req.body.email;
-let password = req.body.password;
-if (!email || !password) {
-  return res.status(400).json({
-    success : false,
-    message : "missing required fields"
-  });
-}
+	let email = req.body.email;
+	let password = req.body.password;
+	if (!email || !password) {
+		return res.status(400).json({
+			success : false,
+			message : "missing required fields"
+		});
+	}
 
-addBitHeaders.hashKey(config.apiprivatekey)
-.then((apihashedkey) => {
-  let params = {
-    url : config.urlToBit + '/organisations/users',
-    headers : {
-      apipublickey : config.apipublickey,
-      apihashedkey : apihashedkey
-    },
-    json : true,
-    body : req.body
-  };
+	addBitHeaders.hashKey(config.apiprivatekey)
+	.then((apihashedkey) => {
+		let params = {
+			url : config.urlToBit + '/organisations/users',
+			headers : {
+				apipublickey : config.apipublickey,
+				apihashedkey : apihashedkey
+			},
+			json : true,
+			body : req.body
+		};
 
-  request.post(params, (error, response, body) => {
-    if (error) {
-      return res.status(response.statusCode).json({
-        success : false,
-        message: error,message
-      });
-    } else {
-      return res.status(response.statusCode).json(body);
-    }
-  });
-})
-.catch((err) => {
-  return res.status(401).json({
-    success : false,
-    message: err.message
-  });
-});
+		request.post(params, (error, response, body) => {
+			if (error) {
+				return res.status(response.statusCode).json({
+					success : false,
+					message: error,message
+				});
+			} else {
+				return res.status(response.statusCode).json(body);
+			}
+		});
+	})
+	.catch((err) => {
+		return res.status(401).json({
+			success : false,
+			message: err.message
+		});
+	});
 });
 					</code>
 				</pre>
 				
 			</div>
 		</section>
-
-	<!-- Code -->
+		<hr />
+	<!-- Contract -->
 			
 		<section id="contract" class="wrapper">
 			<div class="inner">
 
-				<h2 id="content">Associate Account - contract</h2>
+				<h2 id="content">Contract</h2>
 				
 				<h3>Request</h3>
 				<pre>
@@ -133,6 +134,14 @@ POST -> https://test.bit.blockpool.io/organisations/users
 					</code>
 				</pre>
 			</div>
+		</section>
+
+		<hr />
+
+		<section class="wrapper special">
+				<div class="inner">
+					<a href="../../index.html#trusted" class="button alt">Go Back</a>
+				</div>
 		</section>
 		
 
