@@ -3,7 +3,7 @@ const express = require('express');
 const router = express.Router();
 const request = require('request');
 const config = require('../../config/config');
-const addBitHeaders = require('../../handleBiTHeaders');
+const handleBiTHeaders = require('../../handleBiTHeaders');
 
 
 router.post('/', (req, res) => {
@@ -15,7 +15,7 @@ router.post('/', (req, res) => {
         });
     }
 
-    addBitHeaders.hashKey(config.apiprivatekey)
+    handleBiTHeaders.hashKey(config.apiprivatekey)
     .then((apihashedkey) => {
         let params = {
             url : config.urlToBit + '/organisations/users/' + bitid,

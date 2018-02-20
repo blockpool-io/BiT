@@ -53,7 +53,7 @@
 					</div>
 					<div class="form-control narrow">
 						<label for="originwalletid">origin walletid</label>
-						<input name="originwalletid" id="originwalletid" type="text">
+						<input name="originwalletid" id="originwalletid" type="text"> <!-- 5a8a90338a6eab3f60a48458 -->
 					</div>
           <div class="form-control">
             <label for="comment">Comment (optional)</label>
@@ -134,33 +134,31 @@ function hashTheCode(privatekey) {
 				<h3>Request</h3>
 				<pre>
 					<code>
-GET -> https://test.bit.blockpool.io/organisations/users/:bitid
+POST -> https://test.bit.blockpool.io/organisations/transactions/:ticker
+{
+  origin : {
+    bitid : origin user id,
+    walletid : origin wallet Id
+  },
+  destination : {
+    bitid : destination user id,
+    walletid : destination wallet id,
+
+    // OR
+
+    address : relevant destination address
+  },
+  amount : amount to send,
+  comment : optional comment
+}
 					</code>
 				</pre>
 				<h3>Response</h3>
 				<pre>
 					<code>
 {
-	success: true,
-	userEmail: 'email address associated with this bitid',
-	allWallets: [
-		{
-			currency: 'the ticker for the currency as a three letter code, lower case',
-			id: 'the silo id - important for interacting with this silo'
-			siloLabel: 'the string label given the silo by the user',
-			dateCreated: 'when the silo was created',
-			buckets: [] <- 'an empty array currently',
-			addresses: [] <- 'an array of addresses for the silo to be used for receiving addresses',
-			balance: {
-				confirmed: a float representing the available to spend balance of the silo,
-				unconfirmed: a float representing the unavailable to spend balance of the silo,
-				cachedDate: the date at which these numbers are valid,
-				hasErrors: true if an error occurred generating the balance,
-				errorMessage: contains an error message if there was an error,
-				transactionFee: a float representing the service fee for sending funds for this currency
-			}
-		}
-	]
+  success: true,
+  transactionid: unique id of the transaction
 }
 					</code>
 				</pre>
