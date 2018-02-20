@@ -3,7 +3,7 @@ const express = require('express');
 const router = express.Router();
 const request = require('request');
 const config = require('../../config/config');
-const handleBiTHeaders = require('../../handleBiTHeaders');
+const handleBiTHeaders = require('../../handlebitheaders');
 
 
 router.post('/', (req, res) => {
