@@ -2,8 +2,9 @@
 const express = require('express');
 const router = express.Router();
 const request = require('request');
-const config = require('../config/config');
-const addBitHeaders = require('../addBiTHeaders');
+const config = require('../../config/config');
+const addBitHeaders = require('../../handleBiTHeaders');
+
 
 router.post('/', (req, res) => {
     let bitid = req.body.bitid;

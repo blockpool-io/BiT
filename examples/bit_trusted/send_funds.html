@@ -32,17 +32,49 @@
 				<header>
 					<h2>Send Funds from an Associated Account</h2>
 				</header>
-				<form class="grid-form" method="post" action="/query_account">
-					<div class="form-control">
-						<label for="origin">origin account</label>
-						<input name="origin" id="origin" type="text"> <!-- 59db7e083ca77f2ab8d29df3 -->
+				<form class="grid-form" method="post" action="/trusted/send_funds">
+					<div class="form-control narrow">
+						<label for="ticker">Currency</label>
+						<div class="select-wrapper">
+							<select name="ticker" id="ticker">
+								<option value="BPL">Blockpool</option>
+								<option value="BTC">Bitcoin</option>
+								<option value="WBX">WOOOBux</option>
+							</select>
+						</div>
 					</div>
+					<div class="form-control narrow">
+						<label for="amount">amount to send</label>
+						<input name="amount" id="amount" type="text">
+					</div>
+					<div class="form-control narrow">
+						<label for="originbitid">origin bitid</label>
+						<input name="originbitid" id="originbitid" type="text"> <!-- 59db7e083ca77f2ab8d29df3 -->
+					</div>
+					<div class="form-control narrow">
+						<label for="originwalletid">origin walletid</label>
+						<input name="originwalletid" id="originwalletid" type="text">
+					</div>
+          <div class="form-control">
+            <label for="comment">Comment (optional)</label>
+            <textarea name="comment" id="comment" rows="4"></textarea>
+          </div>
+          <h4>Either :: send to another trusted account</h4>
+					<div class="form-control narrow">
+						<label for="destinationbitid">destination bitid</label>
+						<input name="destinationbitid" id="destinationbitid" type="text">
+					</div>
+					<div class="form-control narrow">
+						<label for="destinationwalletid">destination walletid</label>
+						<input name="destinationwalletid" id="destinationwalletid" type="text">
+					</div>
+          <h4>Or :: send to a specified address</h4>
 					<div class="form-control">
-						<label for="bitid">origin account</label>
-						<input name="bitid" id="bitid" type="bitid"> <!-- 59db7e083ca77f2ab8d29df3 -->
+						<label for="destinationaddress">destination address</label>
+						<input name="destinationaddress" id="destinationaddress" type="text">
 					</div>
 					<ul class="actions">
-						<li><input value="Query Account" type="submit"></li>
+						<li><input value="Send funds" type="submit"></li>
 					</ul>
 				</form>
 			</div>
@@ -70,59 +102,20 @@ const config = require('../config/config');
 const bcrypt = require('bcrypt');
 
 function hashTheCode(privatekey) {
-	return new Promise((resolve, reject) => {
-		bcrypt.genSalt(10, (err, salt) => {
-			bcrypt.hash(privatekey, salt, (err, apihashedkey) => {
-					if (err) {
-							return reject(err);
-					} else {
-							return resolve(apihashedkey);
-					}
-			});
-		});
-	});
+  return new Promise((resolve, reject) => {
+    bcrypt.genSalt(10, (err, salt) => {
+      bcrypt.hash(privatekey, salt, (err, apihashedkey) => {
+        if (err) {
+          return reject(err);
+        } else {
+          return resolve(apihashedkey);
+        }
+      });
+    });
+  });
 };
 					
-router.post('/', (req, res) => {
-	let bitid = req.body.bitid;
-	if (!bitid) {
-		return res.status(400).json({
-			success : false,
-			message : "missing required fields"
-		});
-	}
 
-	hashTheCode(config.apiprivatekey)
-	.then((apihashedkey) => {
-		let params = {
-			url : config.urlToBit + '/organisations/users/' + bitid,
-			headers : {
-				apipublickey : config.apipublickey,
-				apihashedkey : apihashedkey
-			},
-			json : true
-		};
-
-		request.get(params, (error, response, body) => {
-			if (error) {
-				return res.status(response.statusCode).json({
-					success : false,
-					message: error,message
-				});
-			} else {
-				return res.status(response.statusCode).json(body);
-			}
-		});
-	})
-	.catch((err) => {
-		return res.status(401).json({
-			success : false,
-			message: err.message
-		});
-	});
-});
-
-module.exports = router;
 					</code>
 				</pre>
 				
