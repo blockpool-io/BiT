@@ -33,9 +33,13 @@
 					<h2>Add Simple Rewarding Location</h2>
 				</header>
         <form class="grid-form" method="post" action="/trusted/locations/add_simple_rewarding_location">
+					<div class="form-control">
+						<label for="locationlabel">label for location (will overwrite if already exists for rewarding user)</label>
+						<input name="locationlabel" id="locationlabel" type="text">
+          </div>
 					<div class="form-control narrow">
-            <label for="originbitid">bitid of rewarder</label>
-            <input name="originbitid" id="originbitid" type="text"> <!-- 59db7e083ca77f2ab8d29df3 -->
+            <label for="rewardingbitid">bitid of rewarder</label>
+            <input name="rewardingbitid" id="rewardingbitid" type="text"> <!-- 59db7e083ca77f2ab8d29df3 -->
           </div>
 					<div class="form-control narrow">
 						<label for="ticker">Currency</label>
@@ -48,8 +52,8 @@
 						</div>
 					</div>
 					<div class="form-control narrow">
-						<label for="originwalletid">origin walletid</label>
-						<input name="originwalletid" id="originwalletid" type="text"> <!-- 5a8a90338a6eab3f60a48458 (BPL) 5a8d1990eeaecd46a84ff5cc (WBX)-->
+						<label for="rewardingwalletid">rewarding walletid</label>
+						<input name="rewardingwalletid" id="rewardingwalletid" type="text"> <!-- 5a8a90338a6eab3f60a48458 (BPL) 5a8d1990eeaecd46a84ff5cc (WBX)-->
 					</div>
 					<div class="form-control narrow">
 						<label for="amount">amount to reward</label>
@@ -111,56 +115,30 @@ function hashTheCode(privatekey) {
 					
 router.post('/', (req, res) => {
   let ticker = req.body.ticker;
+  let locationlabel = req.body.locationlabel;
+  let rewardingbitid = req.body.rewardingbitid;
+  let rewardingwalletid = req.body.rewardingwalletid;
   let amount = req.body.amount;
-  let originbitid = req.body.originbitid;
-  let originwalletid = req.body.originwalletid;
-
-  if (!ticker || !amount || !originbitid || !originwalletid) {
+  let latitude = req.body.latitude;
+  let longitude = req.body.longitude;
+  let proximity = req.body.proximity;
+  if (!ticker || !locationlabel || !rewardingbitid || !rewardingwalletid || !amount || !latitude || !longitude || !proximity) {
     return res.status(400).json({
       success : false,
       message : "missing required fields"
     });
   }
-
-  let destinationbitid = req.body.destinationbitid;
-  let destinationwalletid = req.body.destinationwalletid;
-
-  let destinationaddress = req.body.destinationaddress;
-
-  let destination = {};
-
-  if (destinationaddress) {
-    destination.address = destinationaddress;
-  } else if (destinationbitid && destinationwalletid) {
-    destination.bitid = destinationbitid;
-    destination.walletid = destinationwalletid;
-  } else {
-    return res.status(400).json({
-      success : false,
-      message : "missing required fields"
-    });
-  }
-
-  let comment = req.body.comment;
 
   hashTheCode(config.apiprivatekey)
   .then((apihashedkey) => {
     let params = {
-      url : config.urlToBit + '/organisations/transactions/' + ticker,
+      url : config.urlToBit + '/organisations/locations',
       headers : {
         apipublickey : config.apipublickey,
         apihashedkey : apihashedkey
       },
       json : true,
-      body : {
-        amount : amount,
-        comment : comment,
-        origin : {
-          bitid : originbitid,
-          walletid : originwalletid
-        },
-        destination : destination
-      }
+      body : req.body
     };
 
     request.post(params, (error, response, body) => {
@@ -171,7 +149,7 @@ router.post('/', (req, res) => {
         }
         return res.status(statusCode).json({
           success : false,
-          message: error.message
+          message: error,message
         });
       } else {
         return res.status(response.statusCode).json(body);
@@ -205,22 +183,15 @@ module.exports = router;
 				<h3>Request</h3>
 				<pre>
 					<code>
-POST -> https://test.bit.blockpool.io/organisations/transactions/:ticker
+POST -> https://test.bit.blockpool.io/organisations/locations/:ticker
 {
-  origin : {
-    bitid : origin user id,
-    walletid : origin wallet Id
-  },
-  destination : {
-    bitid : destination user id,
-    walletid : destination wallet id,
-
-    // OR
-
-    address : relevant destination address
-  },
-  amount : amount to send,
-  comment : optional comment
+  locationlabel : 'name for the location'
+  rewardingbitid : 'id of use who will fund the rewards from this location',
+  rewardingwalletid : 'id of wallet from which to fund the rewards',
+  amount : 'amount to reward',
+  latitude : 'latitude of location',
+  longitude : 'longitude of location',
+  proximity : 'diameter of circle (in meters)'
 }
 					</code>
 				</pre>
@@ -229,7 +200,7 @@ POST -> https://test.bit.blockpool.io/organisations/transactions/:ticker
 					<code>
 {
   success: true,
-  transactionid: unique id of the transaction
+  locationid: unique id of the location
 }
 					</code>
 				</pre>
