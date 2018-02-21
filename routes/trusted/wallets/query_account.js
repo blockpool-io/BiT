@@ -2,14 +2,13 @@
 const express = require('express');
 const router = express.Router();
 const request = require('request');
-const config = require('../../config/config');
-const handleBiTHeaders = require('../../headerhandler');
+const config = require('../../../config/config');
+const handleBiTHeaders = require('../../../headerhandler');
 
 
 router.post('/', (req, res) => {
     let bitid = req.body.bitid;
-    let ticker = req.body.ticker;
-    if (!bitid || !ticker) {
+    if (!bitid) {
         return res.status(400).json({
             success : false,
             message : "missing required fields"
@@ -19,18 +18,15 @@ router.post('/', (req, res) => {
     handleBiTHeaders.hashKey(config.apiprivatekey)
     .then((apihashedkey) => {
         let params = {
-            url : config.urlToBit + '/organisations/wallets/' + ticker.toLowerCase(),
+            url : config.urlToBit + '/organisations/users/' + bitid,
             headers : {
                 apipublickey : config.apipublickey,
                 apihashedkey : apihashedkey
             },
-            json : true,
-            body : {
-                bitid : bitid
-            }
+            json : true
         };
     
-        request.post(params, (error, response, body) => {
+        request.get(params, (error, response, body) => {
             if (error) {
                 let statusCode = 500;
                 if (response) {

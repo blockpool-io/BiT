@@ -6,7 +6,7 @@
 -->
 <html>
 	<head>
-		<title>Query for the Balance of an Associated Account</title>
+		<title>Add Simple Rewarding Location</title>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<!--[if lte IE 8]><script src="../../../assets/js/ie/html5shiv.js"></script><![endif]-->
@@ -16,8 +16,8 @@
 	<body>
 	<!-- Banner -->
 		<section id="banner">
-			<h2><strong>Query</strong> for the Balance of an Associated Account</h2>
-			<p>BiT Trusted :: wallets</p>
+			<h2><strong>Add Simple</strong> rewarding location</h2>
+			<p>BiT Trusted :: locations</p>
 			<ul class="actions">
 				<li><a href="#demo" class="button special">Working Demo</a></li>
 				<li><a href="#code" class="button special">Sample Code</a></li>
@@ -30,9 +30,13 @@
 		<section id="demo" class="wrapper style2 special">
 			<div class="inner narrow">
 				<header>
-					<h2>Query for the Balance of an Associated Account</h2>
+					<h2>Add Simple Rewarding Location</h2>
 				</header>
-				<form class="grid-form" method="post" action="/trusted/wallets/query_balance">
+        <form class="grid-form" method="post" action="/trusted/locations/add_simple_rewarding_location">
+					<div class="form-control narrow">
+            <label for="originbitid">bitid of rewarder</label>
+            <input name="originbitid" id="originbitid" type="text"> <!-- 59db7e083ca77f2ab8d29df3 -->
+          </div>
 					<div class="form-control narrow">
 						<label for="ticker">Currency</label>
 						<div class="select-wrapper">
@@ -44,11 +48,27 @@
 						</div>
 					</div>
 					<div class="form-control narrow">
-						<label for="bitid">bitid</label>
-						<input name="bitid" id="bitid" type="text"> <!-- 59db7e083ca77f2ab8d29df3 -->
+						<label for="originwalletid">origin walletid</label>
+						<input name="originwalletid" id="originwalletid" type="text"> <!-- 5a8a90338a6eab3f60a48458 (BPL) 5a8d1990eeaecd46a84ff5cc (WBX)-->
+					</div>
+					<div class="form-control narrow">
+						<label for="amount">amount to reward</label>
+						<input name="amount" id="amount" type="text">
+          </div>
+					<div class="form-control narrow">
+						<label for="latitude">latitude</label>
+						<input name="latitude" id="latitude" type="text">
+					</div>
+					<div class="form-control narrow">
+						<label for="longitude">longitude</label>
+						<input name="longitude" id="longitude" type="text">
+					</div>
+					<div class="form-control">
+						<label for="proximity">proximity (meters)</label>
+						<input name="proximity" id="proximity" type="text">
 					</div>
 					<ul class="actions">
-						<li><input value="Query Balance" type="submit"></li>
+						<li><input value="Create Location" type="submit"></li>
 					</ul>
 				</form>
 			</div>
@@ -61,7 +81,7 @@
 
 				<h2 id="content">Sample Code</h2>
 				<p>
-					Simply decorate your request with the correct headers (apipublickey and apihashedkey) and pass over the relevant bitid
+					Simply decorate your request with the correct headers (apipublickey and apihashedkey) and pass over the relevant bitid.
 				</p>
 				<p>
 					The code below accepts a POST request via an express endpoint. The apipublickey and apiprivatekey are stored in config. 
@@ -88,23 +108,62 @@ function hashTheCode(privatekey) {
     });
   });
 };
-
+					
 router.post('/', (req, res) => {
   let ticker = req.body.ticker;
-  let bitid = req.body.bitid;
+  let amount = req.body.amount;
+  let originbitid = req.body.originbitid;
+  let originwalletid = req.body.originwalletid;
+
+  if (!ticker || !amount || !originbitid || !originwalletid) {
+    return res.status(400).json({
+      success : false,
+      message : "missing required fields"
+    });
+  }
+
+  let destinationbitid = req.body.destinationbitid;
+  let destinationwalletid = req.body.destinationwalletid;
+
+  let destinationaddress = req.body.destinationaddress;
+
+  let destination = {};
+
+  if (destinationaddress) {
+    destination.address = destinationaddress;
+  } else if (destinationbitid && destinationwalletid) {
+    destination.bitid = destinationbitid;
+    destination.walletid = destinationwalletid;
+  } else {
+    return res.status(400).json({
+      success : false,
+      message : "missing required fields"
+    });
+  }
+
+  let comment = req.body.comment;
 
   hashTheCode(config.apiprivatekey)
   .then((apihashedkey) => {
     let params = {
-      url : config.urlToBit + '/organisations/wallets/' + ticker + '/' + bitid,
+      url : config.urlToBit + '/organisations/transactions/' + ticker,
       headers : {
         apipublickey : config.apipublickey,
         apihashedkey : apihashedkey
       },
-      json : true
+      json : true,
+      body : {
+        amount : amount,
+        comment : comment,
+        origin : {
+          bitid : originbitid,
+          walletid : originwalletid
+        },
+        destination : destination
+      }
     };
 
-    request.get(params, (error, response, body) => {
+    request.post(params, (error, response, body) => {
       if (error) {
         let statusCode = 500;
         if (response) {
@@ -112,7 +171,7 @@ router.post('/', (req, res) => {
         }
         return res.status(statusCode).json({
           success : false,
-          message: error,message
+          message: error.message
         });
       } else {
         return res.status(response.statusCode).json(body);
@@ -128,7 +187,6 @@ router.post('/', (req, res) => {
 });
 
 module.exports = router;
-
 					</code>
 				</pre>
 				
@@ -147,7 +205,23 @@ module.exports = router;
 				<h3>Request</h3>
 				<pre>
 					<code>
-GET -> https://test.bit.blockpool.io/organisations/wallets/:ticker/:bitid
+POST -> https://test.bit.blockpool.io/organisations/transactions/:ticker
+{
+  origin : {
+    bitid : origin user id,
+    walletid : origin wallet Id
+  },
+  destination : {
+    bitid : destination user id,
+    walletid : destination wallet id,
+
+    // OR
+
+    address : relevant destination address
+  },
+  amount : amount to send,
+  comment : optional comment
+}
 					</code>
 				</pre>
 				<h3>Response</h3>
@@ -155,14 +229,7 @@ GET -> https://test.bit.blockpool.io/organisations/wallets/:ticker/:bitid
 					<code>
 {
   success: true,
-  balance: {
-    confirmed: a float representing the available to spend balance of the silo,
-    unconfirmed: a float representing the unavailable to spend balance of the silo,
-    cachedDate: the date at which these numbers are valid,
-    hasErrors: true if an error occurred generating the balance,
-    errorMessage: contains an error message if there was an error,
-    transactionFee: a float representing the service fee for sending funds for this currency
-  }
+  transactionid: unique id of the transaction
 }
 					</code>
 				</pre>

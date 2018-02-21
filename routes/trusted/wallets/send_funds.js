@@ -2,8 +2,8 @@
 const express = require('express');
 const router = express.Router();
 const request = require('request');
-const config = require('../../config/config');
-const handleBiTHeaders = require('../../headerhandler');
+const config = require('../../../config/config');
+const handleBiTHeaders = require('../../../headerhandler');
 
 router.post('/', (req, res) => {
   let ticker = req.body.ticker;
