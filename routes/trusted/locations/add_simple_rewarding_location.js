@@ -14,7 +14,8 @@ router.post('/', (req, res) => {
   let latitude = req.body.latitude;
   let longitude = req.body.longitude;
   let proximity = req.body.proximity;
-  if (!ticker || !locationlabel || !rewardingbitid || !rewardingwalletid || !amount || !latitude || !longitude || !proximity) {
+  let disabled = req.body.disabled;
+  if (!ticker || !locationlabel || !rewardingbitid || !rewardingwalletid || !amount || !latitude || !longitude || !proximity || disabled === undefined) {
     return res.status(400).json({
       success : false,
       message : "missing required fields"

@@ -67,9 +67,18 @@
 						<label for="longitude">longitude</label>
 						<input name="longitude" id="longitude" type="text">
 					</div>
-					<div class="form-control">
+					<div class="form-control narrow">
 						<label for="proximity">proximity (meters)</label>
 						<input name="proximity" id="proximity" type="text">
+					</div>
+					<div class="form-control narrow">
+              <label for="disabled">Disabled</label>
+              <div class="select-wrapper">
+                <select name="disabled" id="disabled">
+                  <option value="false">False</option>
+                  <option value="true">True</option>
+                </select>
+              </div>
 					</div>
 					<ul class="actions">
 						<li><input value="Create Location" type="submit"></li>
@@ -122,7 +131,8 @@ router.post('/', (req, res) => {
   let latitude = req.body.latitude;
   let longitude = req.body.longitude;
   let proximity = req.body.proximity;
-  if (!ticker || !locationlabel || !rewardingbitid || !rewardingwalletid || !amount || !latitude || !longitude || !proximity) {
+  let disabled = req.body.disabled;
+  if (!ticker || !locationlabel || !rewardingbitid || !rewardingwalletid || !amount || !latitude || !longitude || !proximity || disabled === undefined) {
     return res.status(400).json({
       success : false,
       message : "missing required fields"
@@ -191,7 +201,8 @@ POST -> https://test.bit.blockpool.io/organisations/locations/:ticker
   amount : 'amount to reward',
   latitude : 'latitude of location',
   longitude : 'longitude of location',
-  proximity : 'diameter of circle (in meters)'
+  proximity : 'diameter of circle (in meters)',
+  disabled : 'boolean whether location is disabled'
 }
 					</code>
 				</pre>
