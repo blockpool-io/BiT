@@ -67,7 +67,7 @@ router.post('/', (req, res) => {
         }
         return res.status(statusCode).json({
           success : false,
-          message: error,message
+          message: error.message
         });
       } else {
         return res.status(response.statusCode).json(body);
