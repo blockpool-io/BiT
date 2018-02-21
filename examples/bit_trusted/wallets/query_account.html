@@ -6,17 +6,17 @@
 -->
 <html>
 	<head>
-		<title>Associate a new or existing BiT account with your system</title>
+		<title>Query an Associated Account</title>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
-		<!--[if lte IE 8]><script src="../../assets/js/ie/html5shiv.js"></script><![endif]-->
-		<link rel="stylesheet" href="../../assets/css/main.css" />
-		<!--[if lte IE 9]><link rel="stylesheet" href="../../assets/css/ie9.css" /><![endif]-->
+		<!--[if lte IE 8]><script src="../../../assets/js/ie/html5shiv.js"></script><![endif]-->
+		<link rel="stylesheet" href="../../../assets/css/main.css" />
+		<!--[if lte IE 9]><link rel="stylesheet" href="../../../assets/css/ie9.css" /><![endif]-->
 	</head>
 	<body>
 	<!-- Banner -->
 		<section id="banner">
-			<h2><strong>Associate</strong> a new or existing BiT account with your system</h2>
+			<h2><strong>Query</strong> an Associated Account</h2>
 			<p>BiT Trusted</p>
 			<ul class="actions">
 				<li><a href="#demo" class="button special">Working Demo</a></li>
@@ -30,19 +30,15 @@
 		<section id="demo" class="wrapper style2 special">
 			<div class="inner narrow">
 				<header>
-					<h2>Associate Account</h2>
+					<h2>Query an Associated Account</h2>
 				</header>
-				<form class="grid-form" method="post" action="/trusted/associate">
-					<div class="form-control narrow">
-						<label for="email">Email</label>
-						<input name="email" id="email" type="email">
-					</div>
-					<div class="form-control narrow">
-						<label for="password">Password</label>
-						<input name="password" id="password" type="password">
+				<form class="grid-form" method="post" action="/trusted/query_account">
+					<div class="form-control">
+						<label for="bitid">bitid</label>
+						<input name="bitid" id="bitid" type="text"> <!-- 59db7e083ca77f2ab8d29df3 -->
 					</div>
 					<ul class="actions">
-						<li><input value="Associate Account" type="submit"></li>
+						<li><input value="Query Account" type="submit"></li>
 					</ul>
 				</form>
 			</div>
@@ -55,8 +51,7 @@
 
 				<h2 id="content">Sample Code</h2>
 				<p>
-					Simply decorate your request with the correct headers (apipublickey and apihashedkey) and pass over the email address and password
-					you have collected.
+					Simply decorate your request with the correct headers (apipublickey and apihashedkey) and pass over the relevant bitid
 				</p>
 				<p>
 					The code below accepts a POST request via an express endpoint. The apipublickey and apiprivatekey are stored in config. 
@@ -74,20 +69,19 @@ function hashTheCode(privatekey) {
   return new Promise((resolve, reject) => {
     bcrypt.genSalt(10, (err, salt) => {
       bcrypt.hash(privatekey, salt, (err, apihashedkey) => {
-        if (err) {
-          return reject(err);
-        } else {
-          return resolve(apihashedkey);
-        }
+          if (err) {
+              return reject(err);
+          } else {
+              return resolve(apihashedkey);
+          }
       });
     });
   });
 };
 
 router.post('/', (req, res) => {
-  let email = req.body.email;
-  let password = req.body.password;
-  if (!email || !password) {
+  let bitid = req.body.bitid;
+  if (!bitid) {
     return res.status(400).json({
       success : false,
       message : "missing required fields"
@@ -97,16 +91,15 @@ router.post('/', (req, res) => {
   hashTheCode(config.apiprivatekey)
   .then((apihashedkey) => {
     let params = {
-    url : config.urlToBit + '/organisations/users',
+      url : config.urlToBit + '/organisations/users/' + bitid,
       headers : {
         apipublickey : config.apipublickey,
         apihashedkey : apihashedkey
       },
-      json : true,
-      body : req.body
+      json : true
     };
 
-    request.post(params, (error, response, body) => {
+    request.get(params, (error, response, body) => {
       if (error) {
         return res.status(response.statusCode).json({
           success : false,
@@ -131,7 +124,9 @@ module.exports = router;
 				
 			</div>
 		</section>
+
 		<hr />
+
 	<!-- Contract -->
 			
 		<section id="contract" class="wrapper">
@@ -142,20 +137,33 @@ module.exports = router;
 				<h3>Request</h3>
 				<pre>
 					<code>
-POST -> https://test.bit.blockpool.io/organisations/users
-
-{
-  email: string,
-  password: string
-}
+GET -> https://test.bit.blockpool.io/organisations/users/:bitid
 					</code>
 				</pre>
 				<h3>Response</h3>
 				<pre>
 					<code>
 {
-  success: true,
-  bitid: 'unique user id for our system'
+	success: true,
+	userEmail: 'email address associated with this bitid',
+	allWallets: [
+		{
+			currency: 'the ticker for the currency as a three letter code, lower case',
+			id: 'the silo id - important for interacting with this silo'
+			siloLabel: 'the string label given the silo by the user',
+			dateCreated: 'when the silo was created',
+			buckets: [] <- 'an empty array currently',
+			addresses: [] <- 'an array of addresses for the silo to be used for receiving addresses',
+			balance: {
+				confirmed: a float representing the available to spend balance of the silo,
+				unconfirmed: a float representing the unavailable to spend balance of the silo,
+				cachedDate: the date at which these numbers are valid,
+				hasErrors: true if an error occurred generating the balance,
+				errorMessage: contains an error message if there was an error,
+				transactionFee: a float representing the service fee for sending funds for this currency
+			}
+		}
+	]
 }
 					</code>
 				</pre>
@@ -179,11 +187,11 @@ POST -> https://test.bit.blockpool.io/organisations/users
         </footer>
 
 		<!-- Scripts -->
-			<script src="../../assets/js/jquery.min.js"></script>
-			<script src="../../assets/js/skel.min.js"></script>
-			<script src="../../assets/js/util.js"></script>
-			<!--[if lte IE 8]><script src="../assets/js/ie/respond.min.js"></script><![endif]-->
-			<script src="../../assets/js/main.js"></script>
+			<script src="../../../assets/js/jquery.min.js"></script>
+			<script src="../../../assets/js/skel.min.js"></script>
+			<script src="../../../assets/js/util.js"></script>
+			<!--[if lte IE 8]><script src="../../../assets/js/ie/respond.min.js"></script><![endif]-->
+			<script src="../../../assets/js/main.js"></script>
 
 	</body>
 </html>
