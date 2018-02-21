@@ -6,16 +6,12 @@ const config = require('../../../config/config');
 const handleBiTHeaders = require('../../../headerhandler');
 
 router.post('/', (req, res) => {
-  let showinactive = req.body.showinactive;
+  let locationid = req.body.locationid;
 
-  let url = config.urlToBit + '/organisations/locations';
-  if (showinactive !== undefined && showinactive !== '') {
-    url += '?showinactive=' + showinactive;
-  }
   handleBiTHeaders.hashKey(config.apiprivatekey)
   .then((apihashedkey) => {
     let params = {
-      url : url,
+      url : config.urlToBit + '/organisations/locations/' + locationid,
       headers : {
         apipublickey : config.apipublickey,
         apihashedkey : apihashedkey
