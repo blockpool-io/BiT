@@ -6,7 +6,7 @@
 -->
 <html>
 	<head>
-		<title>Query an Associated Account</title>
+		<title>Query your account</title>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<!--[if lte IE 8]><script src="../../../assets/js/ie/html5shiv.js"></script><![endif]-->
@@ -16,8 +16,8 @@
 	<body>
 	<!-- Banner -->
 		<section id="banner">
-			<h2><strong>Query</strong> an Associated Account</h2>
-			<p>BiT Trusted :: wallets</p>
+			<h2><strong>Query</strong> your account</h2>
+			<p>BiT PaaS :: wallets</p>
 			<ul class="actions">
 				<li><a href="#demo" class="button special">Working Demo</a></li>
 				<li><a href="#code" class="button special">Sample Code</a></li>
@@ -30,14 +30,21 @@
 		<section id="demo" class="wrapper style2 special">
 			<div class="inner narrow">
 				<header>
-					<h2>Query an Associated Account</h2>
+					<h2>Query your account</h2>
 				</header>
-				<form class="grid-form" method="post" action="/trusted/wallets/query_account">
-					<div class="form-control">
-						<label for="bitid">bitid</label>
-						<input name="bitid" id="bitid" type="text"> <!-- 59db7e083ca77f2ab8d29df3 -->
-					</div>
+				<form class="grid-form" method="post" action="/paas/wallets/query_account">
 					<ul class="actions">
+              <div class="form-control">
+                <label for="ticker">Currency</label>
+                <div class="select-wrapper">
+                  <select name="ticker" id="ticker">
+                    <option value="BPL">Blockpool</option>
+                    <option value="BTC">Bitcoin</option>
+                    <option value="WBX">WOOOBux</option>
+                    <option value="ADC">Audiocoin</option>
+                  </select>
+                </div>
+              </div>
 						<li><input value="Query Account" type="submit"></li>
 					</ul>
 				</form>
@@ -80,33 +87,37 @@ function hashTheCode(privatekey) {
 };
 
 router.post('/', (req, res) => {
-  let bitid = req.body.bitid;
-  if (!bitid) {
+  let ticker = req.body.ticker;
+  if (!ticker) {
     return res.status(400).json({
-      success : false,
-      message : "missing required fields"
+        success : false,
+        message : "missing required fields"
     });
   }
 
   hashTheCode(config.apiprivatekey)
   .then((apihashedkey) => {
     let params = {
-      url : config.urlToBit + '/organisations/users/' + bitid,
+      url : config.urlToBit + '/wallets/' + ticker,
       headers : {
         apipublickey : config.apipublickey,
         apihashedkey : apihashedkey
       },
       json : true
     };
-
+  
     request.get(params, (error, response, body) => {
       if (error) {
-        return res.status(response.statusCode).json({
+        let statusCode = 500;
+        if (response) {
+          statusCode = response.statusCode;
+        }
+        return res.status(statusCode).json({
           success : false,
           message: error,message
         });
       } else {
-        return res.status(response.statusCode).json(body);
+          return res.status(response.statusCode).json(body);
       }
     });
   })
@@ -137,7 +148,7 @@ module.exports = router;
 				<h3>Request</h3>
 				<pre>
 					<code>
-GET -> https://test.bit.blockpool.io/organisations/users/:bitid
+GET -> https://test.bit.blockpool.io/wallets/:ticker
 					</code>
 				</pre>
 				<h3>Response</h3>
@@ -145,24 +156,8 @@ GET -> https://test.bit.blockpool.io/organisations/users/:bitid
 					<code>
 {
 	success: true,
-	userEmail: 'email address associated with this bitid',
-	allWallets: [
-		{
-			currency: 'the ticker for the currency as a three letter code, lower case',
-			id: 'the silo id - important for interacting with this silo'
-			siloLabel: 'the string label given the silo by the user',
-			dateCreated: 'when the silo was created',
-			buckets: [] <- 'an empty array currently',
-			addresses: [] <- 'an array of addresses for the silo to be used for receiving addresses',
-			balance: {
-				confirmed: a float representing the available to spend balance of the silo,
-				unconfirmed: a float representing the unavailable to spend balance of the silo,
-				cachedDate: the date at which these numbers are valid,
-				hasErrors: true if an error occurred generating the balance,
-				errorMessage: contains an error message if there was an error,
-				transactionFee: a float representing the service fee for sending funds for this currency
-			}
-		}
+	walletuniqueidentifiers: [
+		'list of unique identifiers for each wallet'
 	]
 }
 					</code>
