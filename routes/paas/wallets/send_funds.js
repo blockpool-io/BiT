@@ -10,8 +10,9 @@ router.post('/', (req, res) => {
   let amount = req.body.amount;
   let originwalletuniqueidentifier = req.body.originwalletuniqueidentifier;
   let destinationwalletuniqueidentifier = req.body.destinationwalletuniqueidentifier;
+  let destinationaddress = req.body.destinationaddress;
 
-  if (!ticker || !amount || !originwalletuniqueidentifier || !destinationwalletuniqueidentifier) {
+  if (!ticker || !amount || !originwalletuniqueidentifier || (!destinationwalletuniqueidentifier && !destinationaddress)) {
     return res.status(400).json({
       success : false,
       message : "missing required fields"
@@ -32,7 +33,8 @@ router.post('/', (req, res) => {
         amount : amount,
         comment : comment,
         originwalletuniqueidentifier : originwalletuniqueidentifier,
-        destinationwalletuniqueidentifier : destinationwalletuniqueidentifier
+        destinationwalletuniqueidentifier : destinationwalletuniqueidentifier,
+        destinationaddress : destinationaddress
       }
     };
 
