@@ -18,6 +18,7 @@ app.use("/examples", express.static(__dirname + '/examples'));
 app.use("/assets", express.static(__dirname + '/assets'));
 
 app.use('/trusted', require('./routes/trusted'));
+app.use('/paas', require('./routes/paas'));
 
 app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, 'index.html'))

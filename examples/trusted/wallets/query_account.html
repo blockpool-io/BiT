@@ -1,0 +1,197 @@
+<!DOCTYPE HTML>
+<!--
+	Typify by TEMPLATED
+	templated.co @templatedco
+	Released for free under the Creative Commons Attribution 3.0 license (templated.co/license)
+-->
+<html>
+	<head>
+		<title>Query an Associated Account</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<!--[if lte IE 8]><script src="../../../assets/js/ie/html5shiv.js"></script><![endif]-->
+		<link rel="stylesheet" href="../../../assets/css/main.css" />
+		<!--[if lte IE 9]><link rel="stylesheet" href="../../../assets/css/ie9.css" /><![endif]-->
+	</head>
+	<body>
+	<!-- Banner -->
+		<section id="banner">
+			<h2><strong>Query</strong> an Associated Account</h2>
+			<p>BiT Trusted :: wallets</p>
+			<ul class="actions">
+				<li><a href="#demo" class="button special">Working Demo</a></li>
+				<li><a href="#code" class="button special">Sample Code</a></li>
+				<li><a href="#contract" class="button special">Contract</a></li>
+			</ul>
+			<a href="../index.html#trusted" class="button alt">Go Back</a>
+		</section>
+
+	<!-- Demo -->
+		<section id="demo" class="wrapper style2 special">
+			<div class="inner narrow">
+				<header>
+					<h2>Query an Associated Account</h2>
+				</header>
+				<form class="grid-form" method="post" action="/trusted/wallets/query_account">
+					<div class="form-control">
+						<label for="bitid">bitid</label>
+						<input name="bitid" id="bitid" type="text"> <!-- 59db7e083ca77f2ab8d29df3 -->
+					</div>
+					<ul class="actions">
+						<li><input value="Query Account" type="submit"></li>
+					</ul>
+				</form>
+			</div>
+		</section>
+
+	<!-- Code -->
+		
+		<section id="code" class="wrapper">
+			<div class="inner">
+
+				<h2 id="content">Sample Code</h2>
+				<p>
+					Simply decorate your request with the correct headers (apipublickey and apihashedkey) and pass over the relevant bitid
+				</p>
+				<p>
+					The code below accepts a POST request via an express endpoint. The apipublickey and apiprivatekey are stored in config. 
+				</p>
+				<pre>
+					<code>
+'use strict';
+const express = require('express');
+const router = express.Router();
+const request = require('request');
+const config = require('../config/config');
+const bcrypt = require('bcrypt');
+
+function hashTheCode(privatekey) {
+  return new Promise((resolve, reject) => {
+    bcrypt.genSalt(10, (err, salt) => {
+      bcrypt.hash(privatekey, salt, (err, apihashedkey) => {
+          if (err) {
+              return reject(err);
+          } else {
+              return resolve(apihashedkey);
+          }
+      });
+    });
+  });
+};
+
+router.post('/', (req, res) => {
+  let bitid = req.body.bitid;
+  if (!bitid) {
+    return res.status(400).json({
+      success : false,
+      message : "missing required fields"
+    });
+  }
+
+  hashTheCode(config.apiprivatekey)
+  .then((apihashedkey) => {
+    let params = {
+      url : config.urlToBit + '/organisations/users/' + bitid,
+      headers : {
+        apipublickey : config.apipublickey,
+        apihashedkey : apihashedkey
+      },
+      json : true
+    };
+
+    request.get(params, (error, response, body) => {
+      if (error) {
+        return res.status(response.statusCode).json({
+          success : false,
+          message: error,message
+        });
+      } else {
+        return res.status(response.statusCode).json(body);
+      }
+    });
+  })
+  .catch((err) => {
+    return res.status(401).json({
+      success : false,
+      message: err.message
+    });
+  });
+});
+
+module.exports = router;
+					</code>
+				</pre>
+				
+			</div>
+		</section>
+
+		<hr />
+
+	<!-- Contract -->
+			
+		<section id="contract" class="wrapper">
+			<div class="inner">
+
+				<h2 id="content">Contract</h2>
+				
+				<h3>Request</h3>
+				<pre>
+					<code>
+GET -> https://test.bit.blockpool.io/organisations/users/:bitid
+					</code>
+				</pre>
+				<h3>Response</h3>
+				<pre>
+					<code>
+{
+	success: true,
+	userEmail: 'email address associated with this bitid',
+	allWallets: [
+		{
+			currency: 'the ticker for the currency as a three letter code, lower case',
+			id: 'the silo id - important for interacting with this silo'
+			siloLabel: 'the string label given the silo by the user',
+			dateCreated: 'when the silo was created',
+			buckets: [] <- 'an empty array currently',
+			addresses: [] <- 'an array of addresses for the silo to be used for receiving addresses',
+			balance: {
+				confirmed: a float representing the available to spend balance of the silo,
+				unconfirmed: a float representing the unavailable to spend balance of the silo,
+				cachedDate: the date at which these numbers are valid,
+				hasErrors: true if an error occurred generating the balance,
+				errorMessage: contains an error message if there was an error,
+				transactionFee: a float representing the service fee for sending funds for this currency
+			}
+		}
+	]
+}
+					</code>
+				</pre>
+			</div>
+		</section>
+
+		<hr />
+
+		<section class="wrapper special">
+				<div class="inner">
+					<a href="../index.html#trusted" class="button alt">Go Back</a>
+				</div>
+		</section>
+		
+
+		<!-- Footer -->
+        <footer id="footer">
+            <div class="copyright">
+                &copy; Blockpool Samples. Design: <a href="http://templated.co/">TEMPLATED</a>.
+            </div>
+        </footer>
+
+		<!-- Scripts -->
+			<script src="../../../assets/js/jquery.min.js"></script>
+			<script src="../../../assets/js/skel.min.js"></script>
+			<script src="../../../assets/js/util.js"></script>
+			<!--[if lte IE 8]><script src="../../../assets/js/ie/respond.min.js"></script><![endif]-->
+			<script src="../../../assets/js/main.js"></script>
+
+	</body>
+</html>

@@ -6,7 +6,7 @@
 -->
 <html>
 	<head>
-		<title>Query a specific Location associated with your application</title>
+		<title>List locations associated with your application</title>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<!--[if lte IE 8]><script src="../../../assets/js/ie/html5shiv.js"></script><![endif]-->
@@ -16,31 +16,35 @@
 	<body>
 	<!-- Banner -->
 		<section id="banner">
-			<h2><strong>Query a specific Location</strong> associated with your application</h2>
+			<h2><strong>List Locations</strong> associated with your application</h2>
 			<p>BiT Trusted :: locations</p>
 			<ul class="actions">
 				<li><a href="#demo" class="button special">Working Demo</a></li>
 				<li><a href="#code" class="button special">Sample Code</a></li>
 				<li><a href="#contract" class="button special">Contract</a></li>
 			</ul>
-			<a href="../../../index.html#trusted" class="button alt">Go Back</a>
+			<a href="../index.html#trusted" class="button alt">Go Back</a>
 		</section>
 
 	<!-- Demo -->
 		<section id="demo" class="wrapper style2 special">
 			<div class="inner narrow">
 				<header>
-					<h2>Query a specific Location associated with your application</h2>
+					<h2>List locations associated with your application</h2>
         </header>
-				<form class="grid-form" method="post" action="/trusted/locations/query_location">
+				<form class="grid-form" method="post" action="/trusted/locations/list_locations">
 					<div class="form-control">
-            <div class="form-control">
-              <label for="locationid">location id</label>
-              <input name="locationid" id="locationid" type="text"> <!-- 5a8d789e723551d01fb83a4d -->
+            <label for="showinactive">Include inactive in list (optional parameter)</label>
+            <div class="select-wrapper">
+              <select name="showinactive" id="showinactive">
+                  <option value="">Blank</option>
+                  <option value="false">False</option>
+                <option value="true">True</option>
+              </select>
             </div>
           </div>		
 					<ul class="actions">
-						<li><input value="Query Location" type="submit"></li>
+						<li><input value="List Locations" type="submit"></li>
 					</ul>
 				</form>
 			</div>
@@ -81,12 +85,16 @@ function hashTheCode(privatekey) {
 };
 
 router.post('/', (req, res) => {
-  let locationid = req.body.locationid;
+  let showinactive = req.query.showinactive;
 
+  let url = config.urlToBit + '/organisations/locations';
+  if (showinactive !== undefined && showinactive !== '') {
+    url += '?showinactive=' + showinactive;
+  }
   hashTheCode(config.apiprivatekey)
   .then((apihashedkey) => {
     let params = {
-      url : config.urlToBit + '/organisations/locations/' + locationid,
+      url : url,
       headers : {
         apipublickey : config.apipublickey,
         apihashedkey : apihashedkey
@@ -134,33 +142,23 @@ module.exports = router;
 				<h3>Request</h3>
 				<pre>
 					<code>
-GET -> https://test.bit.blockpool.io/organisations/locations/:locationid
+GET -> https://test.bit.blockpool.io/organisations/locations?showinactive=true/false
 					</code>
 				</pre>
-        <h3>Response</h3>
+				<h3>Response</h3>
 				<pre>
 					<code>
 {
   success: true,
-  location: {
-    locationlabel : 'name for the location'
-    rewardingbitid : 'id of use who will fund the rewards from this location',
-    rewardingwalletid : 'id of wallet from which to fund the rewards',
-    amount : 'amount to reward',
-    latitude : 'latitude of location',
-    longitude : 'longitude of location',
-    proximity : 'diameter of circle (in meters)',
-    disabled : 'boolean whether location is disabled'
-  },
-  users : [
-    'array of bitids of users associated with this location'
+  locations : [
+    {
+      locationid : 'id of the location',
+      isactive : 'boolean if the location is active'
+    }
   ]
 }
 					</code>
-        </pre>
-        <p>
-          As we develop this endpoint we will add more details; for example "number of times claimed in last day/week/month".
-        </p>
+				</pre>
 			</div>
 		</section>
 
@@ -168,7 +166,7 @@ GET -> https://test.bit.blockpool.io/organisations/locations/:locationid
 
 		<section class="wrapper special">
 				<div class="inner">
-					<a href="../../../index.html#trusted" class="button alt">Go Back</a>
+					<a href="../index.html#trusted" class="button alt">Go Back</a>
 				</div>
 		</section>
 		

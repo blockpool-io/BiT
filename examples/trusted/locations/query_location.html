@@ -6,7 +6,7 @@
 -->
 <html>
 	<head>
-		<title>Query an Associated Account</title>
+		<title>Query a specific Location associated with your application</title>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<!--[if lte IE 8]><script src="../../../assets/js/ie/html5shiv.js"></script><![endif]-->
@@ -16,34 +16,35 @@
 	<body>
 	<!-- Banner -->
 		<section id="banner">
-			<h2><strong>Query</strong> an Associated Account</h2>
-			<p>BiT Trusted :: wallets</p>
+			<h2><strong>Query a specific Location</strong> associated with your application</h2>
+			<p>BiT Trusted :: locations</p>
 			<ul class="actions">
 				<li><a href="#demo" class="button special">Working Demo</a></li>
 				<li><a href="#code" class="button special">Sample Code</a></li>
 				<li><a href="#contract" class="button special">Contract</a></li>
 			</ul>
-			<a href="../../../index.html#trusted" class="button alt">Go Back</a>
+			<a href="../index.html#trusted" class="button alt">Go Back</a>
 		</section>
 
 	<!-- Demo -->
 		<section id="demo" class="wrapper style2 special">
 			<div class="inner narrow">
 				<header>
-					<h2>Query an Associated Account</h2>
-				</header>
-				<form class="grid-form" method="post" action="/trusted/wallets/query_account">
+					<h2>Query a specific Location associated with your application</h2>
+        </header>
+				<form class="grid-form" method="post" action="/trusted/locations/query_location">
 					<div class="form-control">
-						<label for="bitid">bitid</label>
-						<input name="bitid" id="bitid" type="text"> <!-- 59db7e083ca77f2ab8d29df3 -->
-					</div>
+            <div class="form-control">
+              <label for="locationid">location id</label>
+              <input name="locationid" id="locationid" type="text"> <!-- 5a8d789e723551d01fb83a4d -->
+            </div>
+          </div>		
 					<ul class="actions">
-						<li><input value="Query Account" type="submit"></li>
+						<li><input value="Query Location" type="submit"></li>
 					</ul>
 				</form>
 			</div>
 		</section>
-
 	<!-- Code -->
 		
 		<section id="code" class="wrapper">
@@ -51,7 +52,7 @@
 
 				<h2 id="content">Sample Code</h2>
 				<p>
-					Simply decorate your request with the correct headers (apipublickey and apihashedkey) and pass over the relevant bitid
+					Simply decorate your request with the correct headers (apipublickey and apihashedkey) and call the correct endpoint.
 				</p>
 				<p>
 					The code below accepts a POST request via an express endpoint. The apipublickey and apiprivatekey are stored in config. 
@@ -69,29 +70,23 @@ function hashTheCode(privatekey) {
   return new Promise((resolve, reject) => {
     bcrypt.genSalt(10, (err, salt) => {
       bcrypt.hash(privatekey, salt, (err, apihashedkey) => {
-          if (err) {
-              return reject(err);
-          } else {
-              return resolve(apihashedkey);
-          }
+        if (err) {
+          return reject(err);
+        } else {
+          return resolve(apihashedkey);
+        }
       });
     });
   });
 };
 
 router.post('/', (req, res) => {
-  let bitid = req.body.bitid;
-  if (!bitid) {
-    return res.status(400).json({
-      success : false,
-      message : "missing required fields"
-    });
-  }
+  let locationid = req.body.locationid;
 
   hashTheCode(config.apiprivatekey)
   .then((apihashedkey) => {
     let params = {
-      url : config.urlToBit + '/organisations/users/' + bitid,
+      url : config.urlToBit + '/organisations/locations/' + locationid,
       headers : {
         apipublickey : config.apipublickey,
         apihashedkey : apihashedkey
@@ -101,7 +96,11 @@ router.post('/', (req, res) => {
 
     request.get(params, (error, response, body) => {
       if (error) {
-        return res.status(response.statusCode).json({
+        let statusCode = 500;
+        if (response) {
+          statusCode = response.statusCode;
+        }
+        return res.status(statusCode).json({
           success : false,
           message: error,message
         });
@@ -124,9 +123,7 @@ module.exports = router;
 				
 			</div>
 		</section>
-
 		<hr />
-
 	<!-- Contract -->
 			
 		<section id="contract" class="wrapper">
@@ -137,36 +134,33 @@ module.exports = router;
 				<h3>Request</h3>
 				<pre>
 					<code>
-GET -> https://test.bit.blockpool.io/organisations/users/:bitid
+GET -> https://test.bit.blockpool.io/organisations/locations/:locationid
 					</code>
 				</pre>
-				<h3>Response</h3>
+        <h3>Response</h3>
 				<pre>
 					<code>
 {
-	success: true,
-	userEmail: 'email address associated with this bitid',
-	allWallets: [
-		{
-			currency: 'the ticker for the currency as a three letter code, lower case',
-			id: 'the silo id - important for interacting with this silo'
-			siloLabel: 'the string label given the silo by the user',
-			dateCreated: 'when the silo was created',
-			buckets: [] <- 'an empty array currently',
-			addresses: [] <- 'an array of addresses for the silo to be used for receiving addresses',
-			balance: {
-				confirmed: a float representing the available to spend balance of the silo,
-				unconfirmed: a float representing the unavailable to spend balance of the silo,
-				cachedDate: the date at which these numbers are valid,
-				hasErrors: true if an error occurred generating the balance,
-				errorMessage: contains an error message if there was an error,
-				transactionFee: a float representing the service fee for sending funds for this currency
-			}
-		}
-	]
+  success: true,
+  location: {
+    locationlabel : 'name for the location'
+    rewardingbitid : 'id of use who will fund the rewards from this location',
+    rewardingwalletid : 'id of wallet from which to fund the rewards',
+    amount : 'amount to reward',
+    latitude : 'latitude of location',
+    longitude : 'longitude of location',
+    proximity : 'diameter of circle (in meters)',
+    disabled : 'boolean whether location is disabled'
+  },
+  users : [
+    'array of bitids of users associated with this location'
+  ]
 }
 					</code>
-				</pre>
+        </pre>
+        <p>
+          As we develop this endpoint we will add more details; for example "number of times claimed in last day/week/month".
+        </p>
 			</div>
 		</section>
 
@@ -174,7 +168,7 @@ GET -> https://test.bit.blockpool.io/organisations/users/:bitid
 
 		<section class="wrapper special">
 				<div class="inner">
-					<a href="../../../index.html#trusted" class="button alt">Go Back</a>
+					<a href="../index.html#trusted" class="button alt">Go Back</a>
 				</div>
 		</section>
 		

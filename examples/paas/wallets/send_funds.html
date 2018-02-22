@@ -1,0 +1,270 @@
+<!DOCTYPE HTML>
+<!--
+	Typify by TEMPLATED
+	templated.co @templatedco
+	Released for free under the Creative Commons Attribution 3.0 license (templated.co/license)
+-->
+<html>
+	<head>
+		<title>Send Funds from an Associated Account</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<!--[if lte IE 8]><script src="../../../assets/js/ie/html5shiv.js"></script><![endif]-->
+		<link rel="stylesheet" href="../../../assets/css/main.css" />
+		<!--[if lte IE 9]><link rel="stylesheet" href="../../../assets/css/ie9.css" /><![endif]-->
+	</head>
+	<body>
+	<!-- Banner -->
+		<section id="banner">
+			<h2><strong>Send Funds</strong> from an Associated Account</h2>
+			<p>BiT Trusted :: wallets</p>
+			<ul class="actions">
+				<li><a href="#demo" class="button special">Working Demo</a></li>
+				<li><a href="#code" class="button special">Sample Code</a></li>
+				<li><a href="#contract" class="button special">Contract</a></li>
+			</ul>
+			<a href="../index.html#trusted" class="button alt">Go Back</a>
+		</section>
+
+	<!-- Demo -->
+		<section id="demo" class="wrapper style2 special">
+			<div class="inner narrow">
+				<header>
+					<h2>Send Funds from an Associated Account</h2>
+				</header>
+				<form class="grid-form" method="post" action="/trusted/wallets/send_funds">
+					<div class="form-control narrow">
+						<label for="ticker">Currency</label>
+						<div class="select-wrapper">
+							<select name="ticker" id="ticker">
+								<option value="BPL">Blockpool</option>
+								<option value="BTC">Bitcoin</option>
+								<option value="WBX">WOOOBux</option>
+								<option value="ADC">Audiocoin</option>
+							</select>
+						</div>
+					</div>
+					<div class="form-control narrow">
+						<label for="amount">amount to send</label>
+						<input name="amount" id="amount" type="text">
+					</div>
+					<div class="form-control narrow">
+						<label for="originbitid">origin bitid</label>
+						<input name="originbitid" id="originbitid" type="text"> <!-- 59db7e083ca77f2ab8d29df3 -->
+					</div>
+					<div class="form-control narrow">
+						<label for="originwalletid">origin walletid</label>
+						<input name="originwalletid" id="originwalletid" type="text"> <!-- 5a8a90338a6eab3f60a48458 (BPL) 5a8d1990eeaecd46a84ff5cc (WBX)-->
+					</div>
+          <div class="form-control">
+            <label for="comment">Comment (optional)</label>
+            <textarea name="comment" id="comment" rows="4"></textarea>
+          </div>
+          <h4>Either :: send to another trusted account</h4>
+					<div class="form-control narrow">
+						<label for="destinationbitid">destination bitid</label>
+						<input name="destinationbitid" id="destinationbitid" type="text"> <!-- 59f05849dfe2092d14d98d14 -->
+					</div>
+					<div class="form-control narrow">
+						<label for="destinationwalletid">destination walletid</label>
+						<input name="destinationwalletid" id="destinationwalletid" type="text"> <!-- 5a8d14fa02a84f329489854a (BPL) 5a8d19d6eeaecd46a84ff5ce (WBX) -->
+					</div>
+          <h4>Or :: send to a specified address</h4>
+					<div class="form-control">
+						<label for="destinationaddress">destination address</label>
+						<input name="destinationaddress" id="destinationaddress" type="text"> <!-- BPs1yFuLK9oH9hKr7Qar2nAH5N3wsnAk7m (BPL) WkSCUaAYXo6j8pSLEj1T28LPBQnGQhaBMY (WBX) -->
+					</div>
+					<ul class="actions">
+						<li><input value="Send funds" type="submit"></li>
+					</ul>
+				</form>
+			</div>
+		</section>
+
+	<!-- Code -->
+		
+		<section id="code" class="wrapper">
+			<div class="inner">
+
+				<h2 id="content">Sample Code</h2>
+				<p>
+					Simply decorate your request with the correct headers (apipublickey and apihashedkey) and pass over the relevant data.
+				</p>
+				<p>
+					The code below accepts a POST request via an express endpoint. The apipublickey and apiprivatekey are stored in config. 
+				</p>
+				<pre>
+					<code>
+'use strict';
+const express = require('express');
+const router = express.Router();
+const request = require('request');
+const config = require('../config/config');
+const bcrypt = require('bcrypt');
+
+function hashTheCode(privatekey) {
+  return new Promise((resolve, reject) => {
+    bcrypt.genSalt(10, (err, salt) => {
+      bcrypt.hash(privatekey, salt, (err, apihashedkey) => {
+        if (err) {
+          return reject(err);
+        } else {
+          return resolve(apihashedkey);
+        }
+      });
+    });
+  });
+};
+					
+router.post('/', (req, res) => {
+  let ticker = req.body.ticker;
+  let amount = req.body.amount;
+  let originbitid = req.body.originbitid;
+  let originwalletid = req.body.originwalletid;
+
+  if (!ticker || !amount || !originbitid || !originwalletid) {
+    return res.status(400).json({
+      success : false,
+      message : "missing required fields"
+    });
+  }
+
+  let destinationbitid = req.body.destinationbitid;
+  let destinationwalletid = req.body.destinationwalletid;
+
+  let destinationaddress = req.body.destinationaddress;
+
+  let destination = {};
+
+  if (destinationaddress) {
+    destination.address = destinationaddress;
+  } else if (destinationbitid && destinationwalletid) {
+    destination.bitid = destinationbitid;
+    destination.walletid = destinationwalletid;
+  } else {
+    return res.status(400).json({
+      success : false,
+      message : "missing required fields"
+    });
+  }
+
+  let comment = req.body.comment;
+
+  hashTheCode(config.apiprivatekey)
+  .then((apihashedkey) => {
+    let params = {
+      url : config.urlToBit + '/organisations/transactions/' + ticker,
+      headers : {
+        apipublickey : config.apipublickey,
+        apihashedkey : apihashedkey
+      },
+      json : true,
+      body : {
+        amount : amount,
+        comment : comment,
+        origin : {
+          bitid : originbitid,
+          walletid : originwalletid
+        },
+        destination : destination
+      }
+    };
+
+    request.post(params, (error, response, body) => {
+      if (error) {
+        let statusCode = 500;
+        if (response) {
+          statusCode = response.statusCode;
+        }
+        return res.status(statusCode).json({
+          success : false,
+          message: error.message
+        });
+      } else {
+        return res.status(response.statusCode).json(body);
+      }
+    });
+  })
+  .catch((err) => {
+    return res.status(401).json({
+      success : false,
+      message: err.message
+    });
+  });
+});
+
+module.exports = router;
+					</code>
+				</pre>
+				
+			</div>
+		</section>
+
+		<hr />
+
+	<!-- Contract -->
+			
+		<section id="contract" class="wrapper">
+			<div class="inner">
+
+				<h2 id="content">Contract</h2>
+				
+				<h3>Request</h3>
+				<pre>
+					<code>
+POST -> https://test.bit.blockpool.io/organisations/transactions/:ticker
+{
+  origin : {
+    bitid : origin user id,
+    walletid : origin wallet Id
+  },
+  destination : {
+    bitid : destination user id,
+    walletid : destination wallet id,
+
+    // OR
+
+    address : relevant destination address
+  },
+  amount : amount to send,
+  comment : optional comment
+}
+					</code>
+				</pre>
+				<h3>Response</h3>
+				<pre>
+					<code>
+{
+  success: true,
+  transactionid: unique id of the transaction
+}
+					</code>
+				</pre>
+			</div>
+		</section>
+
+		<hr />
+
+		<section class="wrapper special">
+				<div class="inner">
+					<a href="../index.html#trusted" class="button alt">Go Back</a>
+				</div>
+		</section>
+		
+
+		<!-- Footer -->
+        <footer id="footer">
+            <div class="copyright">
+                &copy; Blockpool Samples. Design: <a href="http://templated.co/">TEMPLATED</a>.
+            </div>
+        </footer>
+
+		<!-- Scripts -->
+			<script src="../../../assets/js/jquery.min.js"></script>
+			<script src="../../../assets/js/skel.min.js"></script>
+			<script src="../../../assets/js/util.js"></script>
+			<!--[if lte IE 8]><script src="../../../assets/js/ie/respond.min.js"></script><![endif]-->
+			<script src="../../../assets/js/main.js"></script>
+
+	</body>
+</html>

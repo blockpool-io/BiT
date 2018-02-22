@@ -6,7 +6,7 @@
 -->
 <html>
 	<head>
-		<title>Associate an existing user to an existing Reward Location</title>
+		<title>Associate a new or existing BiT account with your system</title>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<!--[if lte IE 8]><script src="../../../assets/js/ie/html5shiv.js"></script><![endif]-->
@@ -16,33 +16,33 @@
 	<body>
 	<!-- Banner -->
 		<section id="banner">
-			<h2><strong>Associate</strong> an existing user to an existing Reward Location</h2>
-			<p>BiT Trusted :: locations</p>
+			<h2><strong>Associate</strong> a new or existing BiT account with your system</h2>
+			<p>BiT Trusted :: wallets</p>
 			<ul class="actions">
 				<li><a href="#demo" class="button special">Working Demo</a></li>
 				<li><a href="#code" class="button special">Sample Code</a></li>
 				<li><a href="#contract" class="button special">Contract</a></li>
 			</ul>
-			<a href="../../../index.html#trusted" class="button alt">Go Back</a>
+			<a href="../index.html#trusted" class="button alt">Go Back</a>
 		</section>
 
 	<!-- Demo -->
 		<section id="demo" class="wrapper style2 special">
 			<div class="inner narrow">
 				<header>
-					<h2>Associate an existing user to an existing Reward Location</h2>
+					<h2>Associate Account</h2>
 				</header>
-				<form class="grid-form" method="post" action="/trusted/locations/associate_user_to_location">
+				<form class="grid-form" method="post" action="/trusted/wallets/associate">
 					<div class="form-control narrow">
-            <label for="locationid">location id</label>
-            <input name="locationid" id="locationid" type="text"> <!-- 5a8d789e723551d01fb83a4d -->
-          </div>
+						<label for="email">Email</label>
+						<input name="email" id="email" type="email">
+					</div>
 					<div class="form-control narrow">
-            <label for="bitid">bitid to associate</label>
-            <input name="bitid" id="bitid" type="text"> <!-- 59f05849dfe2092d14d98d14 -->
-          </div>					
+						<label for="password">Password</label>
+						<input name="password" id="password" type="password">
+					</div>
 					<ul class="actions">
-						<li><input value="Associate Account to Location" type="submit"></li>
+						<li><input value="Associate Account" type="submit"></li>
 					</ul>
 				</form>
 			</div>
@@ -55,7 +55,8 @@
 
 				<h2 id="content">Sample Code</h2>
 				<p>
-					Simply decorate your request with the correct headers (apipublickey and apihashedkey) and pass over the location id and bit id you are associating
+					Simply decorate your request with the correct headers (apipublickey and apihashedkey) and pass over the email address and password
+					you have collected.
 				</p>
 				<p>
 					The code below accepts a POST request via an express endpoint. The apipublickey and apiprivatekey are stored in config. 
@@ -84,20 +85,19 @@ function hashTheCode(privatekey) {
 };
 
 router.post('/', (req, res) => {
-  let bitid = req.body.bitid;
-  let locationid = req.body.locationid;
-  if (!bitid || !locationid) {
+  let email = req.body.email;
+  let password = req.body.password;
+  if (!email || !password) {
     return res.status(400).json({
       success : false,
       message : "missing required fields"
     });
   }
-  delete req.body.locationid;
 
   hashTheCode(config.apiprivatekey)
   .then((apihashedkey) => {
     let params = {
-      url : config.urlToBit + '/organisations/locations/' + locationid + '/associate',
+    url : config.urlToBit + '/organisations/users',
       headers : {
         apipublickey : config.apipublickey,
         apihashedkey : apihashedkey
@@ -108,11 +108,7 @@ router.post('/', (req, res) => {
 
     request.post(params, (error, response, body) => {
       if (error) {
-        let statusCode = 500;
-        if (response) {
-          statusCode = response.statusCode;
-        }
-        return res.status(statusCode).json({
+        return res.status(response.statusCode).json({
           success : false,
           message: error,message
         });
@@ -146,10 +142,11 @@ module.exports = router;
 				<h3>Request</h3>
 				<pre>
 					<code>
-POST -> https://test.bit.blockpool.io/organisations/locations/:locationid/associate
+POST -> https://test.bit.blockpool.io/organisations/users
 
 {
-  bitid: string
+  email: string,
+  password: string
 }
 					</code>
 				</pre>
@@ -157,7 +154,8 @@ POST -> https://test.bit.blockpool.io/organisations/locations/:locationid/associ
 				<pre>
 					<code>
 {
-  success: true
+  success: true,
+  bitid: 'unique user id for our system'
 }
 					</code>
 				</pre>
@@ -168,7 +166,7 @@ POST -> https://test.bit.blockpool.io/organisations/locations/:locationid/associ
 
 		<section class="wrapper special">
 				<div class="inner">
-					<a href="../../../index.html#trusted" class="button alt">Go Back</a>
+					<a href="../index.html#trusted" class="button alt">Go Back</a>
 				</div>
 		</section>
 		

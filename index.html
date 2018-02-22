@@ -45,16 +45,16 @@
 						<h2>How to use this guide</h2>
 					</header>
 					<p>
-						There are two ways you can use BiT. This is explained in the section below. Within each section is a list of the functional
+						There are three ways you can use BiT. This is explained in the section below. Within each section is a list of the functional
 						"plugins" that are available. Just click through to the area you are interested in. The working samples integrate with the
 						Blockpool test system.
 					</p>                  
     			</div>
 			</section>
 
-			<section id="howtouse" class="wrapper">
+			<section id="plugins" class="wrapper">
 				<div class="inner">
-					<h3>BiT Authenticated</h3>
+					<h3 id="authenticated">BiT Authenticated</h3>
 					<p>
 						With BiT Authenticated the BiT is responsible for everything.
 					</p>
@@ -63,11 +63,11 @@
 						a JWT on login that you can use to decorate requests to BiT and also validate (using standard JWT) requests to your own API.
 					</p>
 					<p>
-						<a href="#authenticated" class="button alt icon fa-key">Use BiT Authenticated</a>
+						<a href="#authenticated" class="button alt disabled"><i class="fas fa-key"></i> BiT Authenticated Documentation</a>
 					</p>
-					<h3>BiT Trusted</h3>
+					<h3 id="trusted">BiT Trusted</h3>
 					<p>
-						biT Trusted is ideal if you already have authentication and want to integrate BiT seamlessly with your existing system.
+						BiT Trusted is ideal if you already have authentication and want to integrate BiT seamlessly with your existing system.
 					</p>
 					<p>
 						In this case your user provides their permission for BiT to trust your requests for resources that you have permission for. Once trust
@@ -76,122 +76,20 @@
 						interface to do this.
 					</p>
 					<p>
-						<a href="#trusted" class="button alt icon fa-key">Use BiT Trusted</a>
-					</p>
-    			</div>
-			</section>
-
-			<section id="authenticated" class="wrapper special">
-				<div class="inner">
-					<header class="major">
-						<h2>BiT Authenticated</h2>
-					</header>
-					<p>
-						Coming soon...
-					</p>
-				</div>
-			</section>
-			<hr />
-			<section id="trusted" class="wrapper special">
-				<div class="inner">
-					<header class="major">
-						<h2>BiT Trusted</h2>
-          </header>
-          <h4>Accounts</h4>
-					<div class="features">
-						<div class="feature">
-							<i class="fas fa-thumbs-up fa-5x"></i>
-							<h3>Associate Account</h3>
-							<p>Allow one of your users to tell us to trust you.</p>
-							<ul class="actions">
-								<li><a href="examples/bit_trusted/wallets/associate.html" class="button special">See Sample</a></li>
-							</ul>
-						</div>
-						<div class="feature">
-							<i class="fas fa-copy fa-5x"></i>
-							<h3>Query for accounts</h3>
-							<p>Get details about an account that has trust between you and us.</p>
-							<ul class="actions">
-								<li><a href="examples/bit_trusted/wallets/query_account.html" class="button special">See Sample</a></li>
-							</ul>
-						</div>
-						<div class="feature">
-							<i class="fas fa-plus fa-5x"></i>
-							<h3>Create a wallet</h3>
-							<p>Create a crypto-currency wallet, for any of our supported currencies, for a trusted user.</p>
-							<ul class="actions">
-								<li><a href="examples/bit_trusted/wallets/create_wallet.html" class="button special">See Sample</a></li>
-							</ul>
-						</div>
-						<div class="feature">
-							<i class="fab fa-bitcoin fa-5x"></i>
-							<h3>Query balance</h3>
-							<p>Query the balance of a wallet associated with your Organisation</p>
-							<ul class="actions">
-								<li><a href="examples/bit_trusted/wallets/query_balance.html" class="button special">See Sample</a></li>
-							</ul>
-						</div>
-						<div class="feature">
-							<i class="fas fa-paper-plane fa-5x"></i>
-							<h3>Send funds</h3>
-							<p>Send funds, either to another associated wallet, or any valid address</p>
-							<ul class="actions">
-								<li><a href="examples/bit_trusted/wallets/send_funds.html" class="button special">See Sample</a></li>
-							</ul>
-						</div>
-					</div>
-          <h4>Locations</h4>
-					<div class="features">
-            <div class="feature">
-              <i class="fas fa-map-pin fa-5x"></i>
-              <h3>Add Location</h3>
-              <p>Add a simple rewarding location which can pay out on every visit by an associated user</p>
-              <ul class="actions">
-                <li><a href="examples/bit_trusted/locations/add_simple_rewarding_location.html" class="button special">See Sample</a></li>
-              </ul>
-            </div>
-            <div class="feature">
-              <i class="fas fa-clock fa-5x"></i>
-              <h3>Add Location</h3>
-              <p>Add a time based rewarding location which can pay out on every qualifying visit by an associated user</p>
-              <ul class="actions">
-                <li><a href="examples/bit_trusted/locations/add_time_based_rewarding_location.html" class="button special disabled">See Sample</a></li>
-              </ul>
-            </div>
-            <div class="feature">
-              <i class="fas fa-share-alt fa-5x"></i>
-              <h3>Associate to Location</h3>
-              <p>Associate an existing user to be able to earn rewards from a specified Reward Location</p>
-              <ul class="actions">
-                <li><a href="examples/bit_trusted/locations/associate_user_to_location.html" class="button special">See Sample</a></li>
-              </ul>
-            </div>
-            <div class="feature">
-              <i class="fas fa-list fa-5x"></i>
-              <h3>List Locations</h3>
-              <p>List all locations associated with you, with some optional filters and paging</p>
-              <ul class="actions">
-                <li><a href="examples/bit_trusted/locations/list_locations.html" class="button special">See Sample</a></li>
-              </ul>
-            </div>
-            <div class="feature">
-              <i class="fas fa-newspaper fa-5x"></i>
-              <h3>Query Location</h3>
-              <p>Query a specific location to return basic statistics about that location</p>
-              <ul class="actions">
-                <li><a href="examples/bit_trusted/locations/query_location.html" class="button special">See Sample</a></li>
-              </ul>
-            </div>
-            <div class="feature">
-              <i class="fas fa-child fa-5x"></i>
-              <h3>Record Movement</h3>
-              <p>Let us know when one of your users has recorded a movement. This will automatically apply relevant rewards</p>
-              <ul class="actions">
-                <li><a href="examples/bit_trusted/locations/record_movement.html" class="button special disabled">See Sample</a></li>
-              </ul>
-            </div>
-          </div>
-				</div>
+						<a href="examples/trusted/index.html" class="button alt"><i class="fas fa-key"></i> BiT Trusted Documentation</a>
+          </p>
+          <h3 id="paas">PaaS</h3>
+          <p>
+            PaaS is a very cut down implementation ideal if you do not want to give BiT any user information.
+          </p>
+          <p>
+            In this case you do not provide any identifiable information for your customer to BiT at all; all authentication is carried out by
+            your own application. It allows you to develop any technology you want on top of the blockchain, leaving you free to develop your IP without distraction.
+          </p>
+          <p>
+            <a href="examples/paas/index.html" class="button alt"><i class="fas fa-key"></i> PaaS Documentation</a>
+          </p>
+    		</div>
 			</section>
 
 		<!-- Footer -->
