@@ -6,7 +6,7 @@
 -->
 <html>
 	<head>
-		<title>Send Funds from an Associated Account</title>
+		<title>Calculate the expected fee for sending a transaction</title>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<!--[if lte IE 8]><script src="../../../assets/js/ie/html5shiv.js"></script><![endif]-->
@@ -16,7 +16,7 @@
 	<body>
 	<!-- Banner -->
 		<section id="banner">
-			<h2><strong>Send Funds</strong> from an Associated Account</h2>
+			<h2><strong>Calculate</strong> the expected fee for sending a transaction</h2>
 			<p>BiT PaaS :: transactions</p>
 			<ul class="actions">
 				<li><a href="#demo" class="button special">Working Demo</a></li>
@@ -30,9 +30,9 @@
 		<section id="demo" class="wrapper style2 special">
 			<div class="inner narrow">
 				<header>
-					<h2>Send Funds from an Associated Account</h2>
+					<h2>Calculate the expected fee for sending a transaction</h2>
 				</header>
-				<form class="grid-form" method="post" action="/paas/wallets/send_funds">
+				<form class="grid-form" method="post" action="/paas/wallets/calculate_fee">
 					<div class="form-control narrow">
 						<label for="ticker">Currency</label>
 						<div class="select-wrapper">
@@ -52,10 +52,6 @@
 						<label for="originwalletuniqueidentifier">origin wallet unique identifier</label>
 						<input name="originwalletuniqueidentifier" id="originwalletuniqueidentifier" type="text"> <!-- 5a8edeaff9c6a127b0ba5b23 (BPL) 5a8f013a21e6124d00795f9f (WBX) -->
 					</div>
-          <div class="form-control">
-            <label for="comment">Comment (optional)</label>
-            <textarea name="comment" id="comment" rows="4"></textarea>
-          </div>
           <h4>Either :: send to another trusted account</h4>
 					<div class="form-control">
 						<label for="destinationwalletuniqueidentifier">destination wallet unique identifier</label>
@@ -67,7 +63,7 @@
 						<input name="destinationaddress" id="destinationaddress" type="text"> <!-- WhAX1rRKmhD9R5vT1B4XvvcRSyXMevxnhv (WBX) -->
 					</div>
 					<ul class="actions">
-						<li><input value="Send funds" type="submit"></li>
+						<li><input value="Calculate fee" type="submit"></li>
 					</ul>
 				</form>
 			</div>
@@ -121,12 +117,11 @@ router.post('/', (req, res) => {
       message : "missing required fields"
     });
   }
-  let comment = req.body.comment;
 
   hashTheCode(config.apiprivatekey)
   .then((apihashedkey) => {
     let params = {
-      url : config.urlToBit + '/transactions/' + ticker,
+      url : config.urlToBit + '/transactions/' + ticker +'/calculatefee',
       headers : {
         apipublickey : config.apipublickey,
         apihashedkey : apihashedkey
@@ -134,7 +129,6 @@ router.post('/', (req, res) => {
       json : true,
       body : {
         amount : amount,
-        comment : comment,
         originwalletuniqueidentifier : originwalletuniqueidentifier,
         destinationwalletuniqueidentifier : destinationwalletuniqueidentifier,
         destinationaddress : destinationaddress
@@ -183,13 +177,12 @@ module.exports = router;
 				<h3>Request</h3>
 				<pre>
 					<code>
-POST -> https://test.bit.blockpool.io/transactions/:ticker
+POST -> https://test.bit.blockpool.io/transactions/:ticker/calculatefee
 {
   originwalletuniqueidentifier : unique identifier of origin wallet,
   destinationwalletuniqueidentifier : unique identifier of destination wallet (optional if destinationaddress provided),
   destinationaddress : address to send funds to (optional if destinationwalletuniqueidentifier provided),
-  amount : amount to send,
-  comment : optional comment
+  amount : amount to send
 }
 					</code>
 				</pre>
@@ -198,7 +191,7 @@ POST -> https://test.bit.blockpool.io/transactions/:ticker
 					<code>
 {
   success: true,
-  transactionconfirmation : 'unique identifier for this transaction'
+  totalfee: 'float representing the expected total fee for the proposed transaction'
 }
 					</code>
 				</pre>
