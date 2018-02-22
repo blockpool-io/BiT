@@ -32,7 +32,7 @@
 				<header>
 					<h2>Send Funds from an Associated Account</h2>
 				</header>
-				<form class="grid-form" method="post" action="/trusted/wallets/send_funds">
+				<form class="grid-form" method="post" action="/paas/wallets/send_funds">
 					<div class="form-control narrow">
 						<label for="ticker">Currency</label>
 						<div class="select-wrapper">
@@ -48,31 +48,23 @@
 						<label for="amount">amount to send</label>
 						<input name="amount" id="amount" type="text">
 					</div>
-					<div class="form-control narrow">
-						<label for="originbitid">origin bitid</label>
-						<input name="originbitid" id="originbitid" type="text"> <!-- 59db7e083ca77f2ab8d29df3 -->
-					</div>
-					<div class="form-control narrow">
-						<label for="originwalletid">origin walletid</label>
-						<input name="originwalletid" id="originwalletid" type="text"> <!-- 5a8a90338a6eab3f60a48458 (BPL) 5a8d1990eeaecd46a84ff5cc (WBX)-->
+					<div class="form-control">
+						<label for="originwalletuniqueidentifier">origin wallet unique identifier</label>
+						<input name="originwalletuniqueidentifier" id="originwalletuniqueidentifier" type="text"> <!-- 5a8edeaff9c6a127b0ba5b23 (BPL) 5a8f013a21e6124d00795f9f (WBX) -->
 					</div>
           <div class="form-control">
             <label for="comment">Comment (optional)</label>
             <textarea name="comment" id="comment" rows="4"></textarea>
           </div>
           <h4>Either :: send to another trusted account</h4>
-					<div class="form-control narrow">
-						<label for="destinationbitid">destination bitid</label>
-						<input name="destinationbitid" id="destinationbitid" type="text"> <!-- 59f05849dfe2092d14d98d14 -->
-					</div>
-					<div class="form-control narrow">
-						<label for="destinationwalletid">destination walletid</label>
-						<input name="destinationwalletid" id="destinationwalletid" type="text"> <!-- 5a8d14fa02a84f329489854a (BPL) 5a8d19d6eeaecd46a84ff5ce (WBX) -->
+					<div class="form-control">
+						<label for="destinationwalletuniqueidentifier">destination wallet unique identifier</label>
+						<input name="destinationwalletuniqueidentifier" id="destinationwalletuniqueidentifier" type="text"> <!-- 5a8f025821e6124d00795fa6 (WBX) -->
 					</div>
           <h4>Or :: send to a specified address</h4>
 					<div class="form-control">
 						<label for="destinationaddress">destination address</label>
-						<input name="destinationaddress" id="destinationaddress" type="text"> <!-- BPs1yFuLK9oH9hKr7Qar2nAH5N3wsnAk7m (BPL) WkSCUaAYXo6j8pSLEj1T28LPBQnGQhaBMY (WBX) -->
+						<input name="destinationaddress" id="destinationaddress" type="text"> <!-- WZrZCkuHD5iSsnN5aodTw3D751ohHXttpa (WBX) -->
 					</div>
 					<ul class="actions">
 						<li><input value="Send funds" type="submit"></li>
@@ -119,41 +111,21 @@ function hashTheCode(privatekey) {
 router.post('/', (req, res) => {
   let ticker = req.body.ticker;
   let amount = req.body.amount;
-  let originbitid = req.body.originbitid;
-  let originwalletid = req.body.originwalletid;
+  let originwalletuniqueidentifier = req.body.originwalletuniqueidentifier;
+  let destinationwalletuniqueidentifier = req.body.destinationwalletuniqueidentifier;
 
-  if (!ticker || !amount || !originbitid || !originwalletid) {
+  if (!ticker || !amount || !originwalletuniqueidentifier || !destinationwalletuniqueidentifier) {
     return res.status(400).json({
       success : false,
       message : "missing required fields"
     });
   }
-
-  let destinationbitid = req.body.destinationbitid;
-  let destinationwalletid = req.body.destinationwalletid;
-
-  let destinationaddress = req.body.destinationaddress;
-
-  let destination = {};
-
-  if (destinationaddress) {
-    destination.address = destinationaddress;
-  } else if (destinationbitid && destinationwalletid) {
-    destination.bitid = destinationbitid;
-    destination.walletid = destinationwalletid;
-  } else {
-    return res.status(400).json({
-      success : false,
-      message : "missing required fields"
-    });
-  }
-
   let comment = req.body.comment;
 
   hashTheCode(config.apiprivatekey)
   .then((apihashedkey) => {
     let params = {
-      url : config.urlToBit + '/organisations/transactions/' + ticker,
+      url : config.urlToBit + '/transactions/' + ticker,
       headers : {
         apipublickey : config.apipublickey,
         apihashedkey : apihashedkey
@@ -162,11 +134,8 @@ router.post('/', (req, res) => {
       body : {
         amount : amount,
         comment : comment,
-        origin : {
-          bitid : originbitid,
-          walletid : originwalletid
-        },
-        destination : destination
+        originwalletuniqueidentifier : originwalletuniqueidentifier,
+        destinationwalletuniqueidentifier : destinationwalletuniqueidentifier
       }
     };
 
@@ -212,20 +181,10 @@ module.exports = router;
 				<h3>Request</h3>
 				<pre>
 					<code>
-POST -> https://test.bit.blockpool.io/organisations/transactions/:ticker
+POST -> https://test.bit.blockpool.io/transactions/:ticker
 {
-  origin : {
-    bitid : origin user id,
-    walletid : origin wallet Id
-  },
-  destination : {
-    bitid : destination user id,
-    walletid : destination wallet id,
-
-    // OR
-
-    address : relevant destination address
-  },
+  originwalletuniqueidentifier : unique identifier of origin wallet,
+  destinationwalletuniqueidentifier : unique identifier of destination wallet,
   amount : amount to send,
   comment : optional comment
 }
@@ -236,7 +195,7 @@ POST -> https://test.bit.blockpool.io/organisations/transactions/:ticker
 					<code>
 {
   success: true,
-  transactionid: unique id of the transaction
+  transactionconfirmation : 'unique identifier for this transaction'
 }
 					</code>
 				</pre>
