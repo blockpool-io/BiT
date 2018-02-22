@@ -64,7 +64,7 @@
           <h4>Or :: send to a specified address</h4>
 					<div class="form-control">
 						<label for="destinationaddress">destination address</label>
-						<input name="destinationaddress" id="destinationaddress" type="text"> <!-- WZrZCkuHD5iSsnN5aodTw3D751ohHXttpa (WBX) -->
+						<input name="destinationaddress" id="destinationaddress" type="text"> <!-- WhAX1rRKmhD9R5vT1B4XvvcRSyXMevxnhv (WBX) -->
 					</div>
 					<ul class="actions">
 						<li><input value="Send funds" type="submit"></li>
@@ -186,7 +186,8 @@ module.exports = router;
 POST -> https://test.bit.blockpool.io/transactions/:ticker
 {
   originwalletuniqueidentifier : unique identifier of origin wallet,
-  destinationwalletuniqueidentifier : unique identifier of destination wallet,
+  destinationwalletuniqueidentifier : unique identifier of destination wallet (optional if destinationaddress provided),
+  destinationaddress : address to send funds to (optional if destinationwalletuniqueidentifier provided),
   amount : amount to send,
   comment : optional comment
 }
