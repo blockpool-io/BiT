@@ -6,7 +6,7 @@
 -->
 <html>
 	<head>
-		<title>Create a Wallet on PaaS</title>
+		<title>Calculate the expected fee for sending a transaction</title>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<!--[if lte IE 8]><script src="../../../assets/js/ie/html5shiv.js"></script><![endif]-->
@@ -16,24 +16,24 @@
 	<body>
 	<!-- Banner -->
 		<section id="banner">
-			<h2><strong>Create a Wallet</strong> on PaaS</h2>
-			<p>BiT PaaS :: wallets</p>
+			<h2><strong>Calculate</strong> the expected fee for sending a transaction</h2>
+			<p>BiT Trusted :: wallets</p>
 			<ul class="actions">
 				<li><a href="#demo" class="button special">Working Demo</a></li>
 				<li><a href="#code" class="button special">Sample Code</a></li>
 				<li><a href="#contract" class="button special">Contract</a></li>
 			</ul>
-			<a href="../index.html#paas" class="button alt">Go Back</a>
+			<a href="../index.html#trusted" class="button alt">Go Back</a>
 		</section>
 
 	<!-- Demo -->
 		<section id="demo" class="wrapper style2 special">
 			<div class="inner narrow">
 				<header>
-					<h2>Create a Wallet</h2>
+					<h2>Calculate the expected fee for sending a transaction</h2>
 				</header>
-				<form class="grid-form" method="post" action="/paas/wallets/create_wallet">
-					<div class="form-control">
+				<form class="grid-form" method="post" action="/trusted/wallets/calculate_fee">
+					<div class="form-control narrow">
 						<label for="ticker">Currency</label>
 						<div class="select-wrapper">
 							<select name="ticker" id="ticker">
@@ -44,8 +44,34 @@
 							</select>
 						</div>
 					</div>
+					<div class="form-control narrow">
+						<label for="amount">amount to send</label>
+						<input name="amount" id="amount" type="text">
+					</div>
+					<div class="form-control narrow">
+						<label for="originbitid">origin bitid</label>
+						<input name="originbitid" id="originbitid" type="text"> <!-- 59db7e083ca77f2ab8d29df3 -->
+					</div>
+					<div class="form-control narrow">
+						<label for="originwalletid">origin walletid</label>
+						<input name="originwalletid" id="originwalletid" type="text"> <!-- 5a8a90338a6eab3f60a48458 (BPL) 5a8d1990eeaecd46a84ff5cc (WBX)-->
+					</div>
+          <h4>Either :: send to another trusted account</h4>
+					<div class="form-control narrow">
+						<label for="destinationbitid">destination bitid</label>
+						<input name="destinationbitid" id="destinationbitid" type="text"> <!-- 59f05849dfe2092d14d98d14 -->
+					</div>
+					<div class="form-control narrow">
+						<label for="destinationwalletid">destination walletid</label>
+						<input name="destinationwalletid" id="destinationwalletid" type="text"> <!-- 5a8d14fa02a84f329489854a (BPL) 5a8d19d6eeaecd46a84ff5ce (WBX) -->
+					</div>
+          <h4>Or :: send to a specified address</h4>
+					<div class="form-control">
+						<label for="destinationaddress">destination address</label>
+						<input name="destinationaddress" id="destinationaddress" type="text"> <!-- BPs1yFuLK9oH9hKr7Qar2nAH5N3wsnAk7m (BPL) WkSCUaAYXo6j8pSLEj1T28LPBQnGQhaBMY (WBX) -->
+					</div>
 					<ul class="actions">
-						<li><input value="Create Wallet" type="submit"></li>
+						<li><input value="Query Fee" type="submit"></li>
 					</ul>
 				</form>
 			</div>
@@ -58,7 +84,7 @@
 
 				<h2 id="content">Sample Code</h2>
 				<p>
-					Simply decorate your request with the correct headers (apipublickey and apihashedkey) and plug in the correct ticker and bitid.
+					Simply decorate your request with the correct headers (apipublickey and apihashedkey) and pass over the relevant data.
 				</p>
 				<p>
 					The code below accepts a POST request via an express endpoint. The apipublickey and apiprivatekey are stored in config. 
@@ -75,21 +101,44 @@ const bcrypt = require('bcrypt');
 function hashTheCode(privatekey) {
   return new Promise((resolve, reject) => {
     bcrypt.genSalt(10, (err, salt) => {
-			bcrypt.hash(privatekey, salt, (err, apihashedkey) => {
-					if (err) {
-							return reject(err);
-					} else {
-							return resolve(apihashedkey);
-					}
-			});
-		});
-	});
+      bcrypt.hash(privatekey, salt, (err, apihashedkey) => {
+        if (err) {
+          return reject(err);
+        } else {
+          return resolve(apihashedkey);
+        }
+      });
+    });
+  });
 };
-
-router.post('/', (req, res) => {
+					
+router.put('/', (req, res) => {
   let ticker = req.body.ticker;
-  if (!ticker) {
-      return res.status(400).json({
+  let amount = req.body.amount;
+  let originbitid = req.body.originbitid;
+  let originwalletid = req.body.originwalletid;
+
+  if (!ticker || !amount || !originbitid || !originwalletid) {
+    return res.status(400).json({
+      success : false,
+      message : "missing required fields"
+    });
+  }
+
+  let destinationbitid = req.body.destinationbitid;
+  let destinationwalletid = req.body.destinationwalletid;
+
+  let destinationaddress = req.body.destinationaddress;
+
+  let destination = {};
+
+  if (destinationaddress) {
+    destination.address = destinationaddress;
+  } else if (destinationbitid && destinationwalletid) {
+    destination.bitid = destinationbitid;
+    destination.walletid = destinationwalletid;
+  } else {
+    return res.status(400).json({
       success : false,
       message : "missing required fields"
     });
@@ -98,12 +147,20 @@ router.post('/', (req, res) => {
   hashTheCode(config.apiprivatekey)
   .then((apihashedkey) => {
     let params = {
-      url : config.urlToBit + '/wallets/' + ticker.toLowerCase(),
+      url : config.urlToBit + '/organisations/transactions/' + ticker,
       headers : {
         apipublickey : config.apipublickey,
         apihashedkey : apihashedkey
       },
-      json : true
+      json : true,
+      body : {
+        amount : amount,
+        origin : {
+          bitid : originbitid,
+          walletid : originwalletid
+        },
+        destination : destination
+      }
     };
 
     request.post(params, (error, response, body) => {
@@ -114,8 +171,8 @@ router.post('/', (req, res) => {
         }
         return res.status(statusCode).json({
           success : false,
-          message: error,message
-       });
+          message: error.message
+        });
       } else {
         return res.status(response.statusCode).json(body);
       }
@@ -135,7 +192,9 @@ module.exports = router;
 				
 			</div>
 		</section>
+
 		<hr />
+
 	<!-- Contract -->
 			
 		<section id="contract" class="wrapper">
@@ -146,15 +205,30 @@ module.exports = router;
 				<h3>Request</h3>
 				<pre>
 					<code>
-POST -> https://test.bit.blockpool.io/wallets/:ticker
+PUT -> https://test.bit.blockpool.io/organisations/transactions/:ticker
+{
+  origin : {
+    bitid : origin user id,
+    walletid : origin wallet Id
+  },
+  destination : {
+    bitid : destination user id,
+    walletid : destination wallet id,
+
+    // OR
+
+    address : relevant destination address
+  },
+  amount : amount to send
+}
 					</code>
 				</pre>
 				<h3>Response</h3>
 				<pre>
 					<code>
 {
-  success : true,
-  walletuniqueidentifier: 'the identifier for the created wallet'
+  success: true,
+  totalfee: 'float representing the expected total fee for the proposed transaction'
 }
 					</code>
 				</pre>

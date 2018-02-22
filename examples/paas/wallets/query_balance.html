@@ -45,8 +45,8 @@
 						</div>
 					</div>
 					<div class="form-control narrow">
-						<label for="bitid">bitid</label>
-						<input name="bitid" id="bitid" type="text"> <!-- 59db7e083ca77f2ab8d29df3 -->
+						<label for="walletuniqueidentifier">wallet unique identifier</label>
+						<input name="walletuniqueidentifier" id="walletuniqueidentifier" type="text"> <!-- 5a8edeaff9c6a127b0ba5b23 -->
 					</div>
 					<ul class="actions">
 						<li><input value="Query Balance" type="submit"></li>
@@ -148,7 +148,7 @@ module.exports = router;
 				<h3>Request</h3>
 				<pre>
 					<code>
-GET -> https://test.bit.blockpool.io/organisations/wallets/:ticker/:bitid
+GET -> https://test.bit.blockpool.io/wallets/:ticker/:walletuniqueidentifier
 					</code>
 				</pre>
 				<h3>Response</h3>
@@ -162,7 +162,7 @@ GET -> https://test.bit.blockpool.io/organisations/wallets/:ticker/:bitid
     cachedDate: the date at which these numbers are valid,
     hasErrors: true if an error occurred generating the balance,
     errorMessage: contains an error message if there was an error,
-    transactionFee: a float representing the service fee for sending funds for this currency
+    transactionFee: a float representing the service fee per message kb for sending funds for this currency
   }
 }
 					</code>
