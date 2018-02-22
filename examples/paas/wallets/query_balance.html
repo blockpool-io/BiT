@@ -23,7 +23,7 @@
 				<li><a href="#code" class="button special">Sample Code</a></li>
 				<li><a href="#contract" class="button special">Contract</a></li>
 			</ul>
-			<a href="../index.html#trusted" class="button alt">Go Back</a>
+			<a href="../index.html#wallets" class="button alt">Go Back</a>
 		</section>
 
 	<!-- Demo -->
@@ -32,7 +32,7 @@
 				<header>
 					<h2>Query for the Balance of an Associated Account</h2>
 				</header>
-				<form class="grid-form" method="post" action="/trusted/wallets/query_balance">
+				<form class="grid-form" method="post" action="/paas/wallets/query_balance">
 					<div class="form-control narrow">
 						<label for="ticker">Currency</label>
 						<div class="select-wrapper">
@@ -92,12 +92,12 @@ function hashTheCode(privatekey) {
 
 router.post('/', (req, res) => {
   let ticker = req.body.ticker;
-  let bitid = req.body.bitid;
+  let walletuniqueidentifier = req.body.walletuniqueidentifier;
 
   hashTheCode(config.apiprivatekey)
   .then((apihashedkey) => {
     let params = {
-      url : config.urlToBit + '/organisations/wallets/' + ticker + '/' + bitid,
+      url : config.urlToBit + '/wallets/' + ticker + '/' + walletuniqueidentifier,
       headers : {
         apipublickey : config.apipublickey,
         apihashedkey : apihashedkey
@@ -174,7 +174,7 @@ GET -> https://test.bit.blockpool.io/wallets/:ticker/:walletuniqueidentifier
 
 		<section class="wrapper special">
 				<div class="inner">
-					<a href="../index.html#trusted" class="button alt">Go Back</a>
+					<a href="../index.html#wallets" class="button alt">Go Back</a>
 				</div>
 		</section>
 		
