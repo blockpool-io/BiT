@@ -1,90 +1,90 @@
 <!DOCTYPE HTML>
 <!--
-	Typify by TEMPLATED
-	templated.co @templatedco
-	Released for free under the Creative Commons Attribution 3.0 license (templated.co/license)
+	Story by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
 -->
 <html>
 	<head>
-		<title>Send Funds from an Associated Account</title>
+		<title>Blockpool API Documentation - Send Funds from an Associated Account</title>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
-		<!--[if lte IE 8]><script src="../../../assets/js/ie/html5shiv.js"></script><![endif]-->
 		<link rel="stylesheet" href="../../../assets/css/main.css" />
-		<!--[if lte IE 9]><link rel="stylesheet" href="../../../assets/css/ie9.css" /><![endif]-->
 	</head>
 	<body>
-	<!-- Banner -->
-		<section id="banner">
-			<h2><strong>Send Funds</strong> from an Associated Account</h2>
-			<p>BiT Trusted :: wallets</p>
-			<ul class="actions">
-				<li><a href="#demo" class="button special">Working Demo</a></li>
-				<li><a href="#code" class="button special">Sample Code</a></li>
-				<li><a href="#contract" class="button special">Contract</a></li>
-			</ul>
-			<a href="../index.html#accounts" class="button alt">Go Back</a>
-		</section>
-
-	<!-- Demo -->
-		<section id="demo" class="wrapper style2 special">
-			<div class="inner narrow">
-				<header>
-					<h2>Send Funds from an Associated Account</h2>
-				</header>
-				<form class="grid-form" method="post" action="/trusted/wallets/send_funds">
-					<div class="form-control narrow">
-						<label for="ticker">Currency</label>
-						<div class="select-wrapper">
-							<select name="ticker" id="ticker">
-								<option value="BPL">Blockpool</option>
-								<option value="BTC">Bitcoin</option>
-								<option value="WBX">WOOOBux</option>
-								<option value="ADC">Audiocoin</option>
-							</select>
-						</div>
-					</div>
-					<div class="form-control narrow">
-						<label for="amount">amount to send</label>
-						<input name="amount" id="amount" type="text">
-					</div>
-					<div class="form-control narrow">
-						<label for="originbitid">origin bitid</label>
-						<input name="originbitid" id="originbitid" type="text"> <!-- 59db7e083ca77f2ab8d29df3 -->
-					</div>
-					<div class="form-control narrow">
-						<label for="originwalletid">origin walletid</label>
-						<input name="originwalletid" id="originwalletid" type="text"> <!-- 5a8a90338a6eab3f60a48458 (BPL) 5a8d1990eeaecd46a84ff5cc (WBX)-->
-					</div>
-          <div class="form-control">
+    <div id="wrapper" class="divided">    
+      <section class="banner style1 orient-left content-align-left image-position-right fullscreen onload-image-fade-in onload-content-fade-right">
+        <div class="content">
+          <h1>Send Funds from an Associated Account</h1>
+          <p>BiT Trusted :: accounts</p>
+          <ul class="actions horizontal">
+              <li><a href="#demo" class="button big wide smooth-scroll-middle">Working Demo</a></li>
+              <li><a href="#code" class="button big wide smooth-scroll-middle">Sample Code</a></li>
+            <li><a href="#contract" class="button big wide smooth-scroll-middle">Contract</a></li>
+          </ul>
+          <a href="../index.html#accounts" class="button alt center">Go Back</a>
+        </div>
+        <div class="image">
+          <img src="../../../images/banner.jpg" alt="" />
+        </div>
+      </section>
+    <!-- Demo -->
+    <section id="demo" class="wrapper style1 align-center">
+      <div class="inner medium">
+        <h2>Working Example - Send Funds</h2>
+        <form method="post" action="/trusted/wallets/send_funds">
+          <div class="field half first">
+            <label for="ticker">Currency</label>
+            <select name="ticker" id="ticker">
+              <option value="BPL">Blockpool</option>
+              <option value="BTC">Bitcoin</option>
+              <option value="WBX">WOOOBux</option>
+              <option value="ADC">Audiocoin</option>
+            </select>
+          </div>
+          <div class="field half">
+            <label for="amount">amount to send</label>
+            <input name="amount" id="amount" type="text">
+          </div>
+          <div class="field half">
+            <label for="originbitid">origin bitid</label>
+            <input name="originbitid" id="originbitid" type="text"> <!-- 59db7e083ca77f2ab8d29df3 -->
+          </div>
+          <div class="field half">
+            <label for="originwalletid">origin walletid</label>
+            <input name="originwalletid" id="originwalletid" type="text"> <!-- 5a8a90338a6eab3f60a48458 (BPL) 5a8d1990eeaecd46a84ff5cc (WBX)-->
+          </div>
+          <div class="field">
             <label for="comment">Comment (optional)</label>
             <textarea name="comment" id="comment" rows="4"></textarea>
           </div>
           <h4>Either :: send to another trusted account</h4>
-					<div class="form-control narrow">
-						<label for="destinationbitid">destination bitid</label>
-						<input name="destinationbitid" id="destinationbitid" type="text"> <!-- 59f05849dfe2092d14d98d14 -->
-					</div>
-					<div class="form-control narrow">
-						<label for="destinationwalletid">destination walletid</label>
-						<input name="destinationwalletid" id="destinationwalletid" type="text"> <!-- 5a8d14fa02a84f329489854a (BPL) 5a8d19d6eeaecd46a84ff5ce (WBX) -->
-					</div>
+          <div class="field half">
+            <label for="destinationbitid">destination bitid</label>
+            <input name="destinationbitid" id="destinationbitid" type="text"> <!-- 59f05849dfe2092d14d98d14 -->
+          </div>
+          <div class="field half">
+            <label for="destinationwalletid">destination walletid</label>
+            <input name="destinationwalletid" id="destinationwalletid" type="text"> <!-- 5a8d14fa02a84f329489854a (BPL) 5a8d19d6eeaecd46a84ff5ce (WBX) -->
+          </div>
           <h4>Or :: send to a specified address</h4>
-					<div class="form-control">
-						<label for="destinationaddress">destination address</label>
+          <div class="field">
+            <label for="destinationaddress">destination address</label>
 						<input name="destinationaddress" id="destinationaddress" type="text"> <!-- BPs1yFuLK9oH9hKr7Qar2nAH5N3wsnAk7m (BPL) WkSCUaAYXo6j8pSLEj1T28LPBQnGQhaBMY (WBX) -->
-					</div>
-					<ul class="actions">
-						<li><input value="Send funds" type="submit"></li>
-					</ul>
-				</form>
-			</div>
-		</section>
+          </div>
+          <ul class="actions">
+            <li><input type="submit" name="submit" id="submit" value="Calculate Fee" /></li>
+          </ul>
+        </form>
+
+      </div>
+    </section>
+
 
 	<!-- Code -->
 		
-		<section id="code" class="wrapper">
-			<div class="inner">
+		<section id="code" class="wrapper style1 align-center">
+			<div class="inner medium">
 
 				<h2 id="content">Sample Code</h2>
 				<p>
@@ -93,7 +93,7 @@
 				<p>
 					The code below accepts a POST request via an express endpoint. The apipublickey and apiprivatekey are stored in config. 
 				</p>
-				<pre>
+				<pre class="align-left">
 					<code>
 'use strict';
 const express = require('express');
@@ -115,7 +115,7 @@ function hashTheCode(privatekey) {
     });
   });
 };
-					
+          
 router.post('/', (req, res) => {
   let ticker = req.body.ticker;
   let amount = req.body.amount;
@@ -199,18 +199,15 @@ module.exports = router;
 				
 			</div>
 		</section>
-
-		<hr />
-
 	<!-- Contract -->
 			
-		<section id="contract" class="wrapper">
-			<div class="inner">
+		<section id="contract" class="wrapper style1 align-center">
+			<div class="inner medium">
 
 				<h2 id="content">Contract</h2>
 				
 				<h3>Request</h3>
-				<pre>
+				<pre class="align-left">
 					<code>
 POST -> https://test.bit.blockpool.io/organisations/transactions/:ticker
 {
@@ -232,7 +229,7 @@ POST -> https://test.bit.blockpool.io/organisations/transactions/:ticker
 					</code>
 				</pre>
 				<h3>Response</h3>
-				<pre>
+				<pre class="align-left">
 					<code>
 {
   success: true,
@@ -243,28 +240,23 @@ POST -> https://test.bit.blockpool.io/organisations/transactions/:ticker
 			</div>
 		</section>
 
-		<hr />
-
-		<section class="wrapper special">
-				<div class="inner">
+		<section class="wrapper style1 align-center">
+				<div class="inner medium">
 					<a href="../index.html#accounts" class="button alt">Go Back</a>
 				</div>
 		</section>
-		
-
-		<!-- Footer -->
-        <footer id="footer">
-            <div class="copyright">
-                &copy; Blockpool Samples. Design: <a href="http://templated.co/">TEMPLATED</a>.
-            </div>
-        </footer>
-
-		<!-- Scripts -->
-			<script src="../../../assets/js/jquery.min.js"></script>
-			<script src="../../../assets/js/skel.min.js"></script>
-			<script src="../../../assets/js/util.js"></script>
-			<!--[if lte IE 8]><script src="../../../assets/js/ie/respond.min.js"></script><![endif]-->
-			<script src="../../../assets/js/main.js"></script>
+		<footer class="wrapper style1 align-center">
+        <div class="inner">
+          <p>&copy; Blockpool. Design: <a href="https://html5up.net">HTML5 UP</a>.</p>
+        </div>
+      </footer>
+    </div>
+  
+      <!-- Scripts -->
+      <script src="../../assets/js/jquery.min.js"></script>
+      <script src="../../assets/js/skel.min.js"></script>
+      <script src="../../assets/js/util.js"></script>
+      <script src="../../assets/js/main.js"></script>
 
 	</body>
 </html>

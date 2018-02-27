@@ -1,0 +1,217 @@
+<!DOCTYPE HTML>
+<!--
+	Story by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+	<head>
+		<title>Blockpool API Documentation - Calculate the expected fee for sending a transaction</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<link rel="stylesheet" href="../../../assets/css/main.css" />
+	</head>
+	<body>
+    <div id="wrapper" class="divided">    
+      <section class="banner style1 orient-left content-align-left image-position-right fullscreen onload-image-fade-in onload-content-fade-right">
+        <div class="content">
+          <h1>Calculate the expected fee for sending a transaction</h1>
+          <p>BiT PaaS :: transactions</p>
+          <ul class="actions horizontal">
+              <li><a href="#demo" class="button big wide smooth-scroll-middle">Working Demo</a></li>
+              <li><a href="#code" class="button big wide smooth-scroll-middle">Sample Code</a></li>
+            <li><a href="#contract" class="button big wide smooth-scroll-middle">Contract</a></li>
+          </ul>
+          <a href="../index.html#transactions" class="button alt center">Go Back</a>
+        </div>
+        <div class="image">
+          <img src="../../../images/banner.jpg" alt="" />
+        </div>
+      </section>
+    <!-- Demo -->
+    <section id="demo" class="wrapper style1 align-center">
+      <div class="inner medium">
+        <h2>Working Example - Calculate Fee</h2>
+        <form method="post" action="/paas/wallets/calculate_fee">
+          <div class="field half first">
+            <label for="ticker">Currency</label>
+            <select name="ticker" id="ticker">
+              <option value="BPL">Blockpool</option>
+              <option value="BTC">Bitcoin</option>
+              <option value="WBX">WOOOBux</option>
+              <option value="ADC">Audiocoin</option>
+            </select>
+          </div>
+          <div class="field half">
+            <label for="amount">amount to send</label>
+            <input name="amount" id="amount" type="text">
+          </div>
+          <div class="field">
+            <label for="originwalletuniqueidentifier">origin wallet unique identifier</label>
+            <input name="originwalletuniqueidentifier" id="originwalletuniqueidentifier" type="text"> <!-- 5a8edeaff9c6a127b0ba5b23 (BPL) 5a8f013a21e6124d00795f9f (WBX) -->
+          </div>
+          <h4>Either :: send to another trusted account</h4>
+          <div class="field">
+            <label for="destinationwalletuniqueidentifier">destination wallet unique identifier</label>
+            <input name="destinationwalletuniqueidentifier" id="destinationwalletuniqueidentifier" type="text"> <!-- 5a8f025821e6124d00795fa6 (WBX) -->
+          </div>
+          <h4>Or :: send to a specified address</h4>
+          <div class="field">
+            <label for="destinationaddress">destination address</label>
+            <input name="destinationaddress" id="destinationaddress" type="text"> <!-- WhAX1rRKmhD9R5vT1B4XvvcRSyXMevxnhv (WBX) -->
+          </div>
+          <ul class="actions">
+            <li><input type="submit" name="submit" id="submit" value="Calculate Fee" /></li>
+          </ul>
+        </form>
+
+      </div>
+    </section>
+
+
+	<!-- Code -->
+		
+		<section id="code" class="wrapper style1 align-center">
+			<div class="inner medium">
+
+				<h2 id="content">Sample Code</h2>
+				<p>
+					Simply decorate your request with the correct headers (apipublickey and apihashedkey) and pass over the relevant data.
+				</p>
+				<p>
+					The code below accepts a POST request via an express endpoint. The apipublickey and apiprivatekey are stored in config. 
+				</p>
+				<pre class="align-left">
+					<code>
+'use strict';
+const express = require('express');
+const router = express.Router();
+const request = require('request');
+const config = require('../config/config');
+const bcrypt = require('bcrypt');
+
+function hashTheCode(privatekey) {
+  return new Promise((resolve, reject) => {
+    bcrypt.genSalt(10, (err, salt) => {
+      bcrypt.hash(privatekey, salt, (err, apihashedkey) => {
+        if (err) {
+          return reject(err);
+        } else {
+          return resolve(apihashedkey);
+        }
+      });
+    });
+  });
+};
+          
+router.post('/', (req, res) => {
+  let ticker = req.body.ticker;
+  let amount = req.body.amount;
+  let originwalletuniqueidentifier = req.body.originwalletuniqueidentifier;
+  let destinationwalletuniqueidentifier = req.body.destinationwalletuniqueidentifier;
+  let destinationaddress = req.body.destinationaddress;
+
+  if (!ticker || !amount || !originwalletuniqueidentifier || (!destinationwalletuniqueidentifier && !destinationaddress)) {
+    return res.status(400).json({
+      success : false,
+      message : "missing required fields"
+    });
+  }
+
+  hashTheCode(config.apiprivatekey)
+  .then((apihashedkey) => {
+    let params = {
+      url : config.urlToBit + '/transactions/' + ticker +'/calculatefee',
+      headers : {
+        apipublickey : config.apipublickey,
+        apihashedkey : apihashedkey
+      },
+      json : true,
+      body : {
+        amount : amount,
+        originwalletuniqueidentifier : originwalletuniqueidentifier,
+        destinationwalletuniqueidentifier : destinationwalletuniqueidentifier,
+        destinationaddress : destinationaddress
+      }
+    };
+
+    request.post(params, (error, response, body) => {
+      if (error) {
+        let statusCode = 500;
+        if (response) {
+          statusCode = response.statusCode;
+        }
+        return res.status(statusCode).json({
+          success : false,
+          message: error.message
+        });
+      } else {
+        return res.status(response.statusCode).json(body);
+      }
+    });
+  })
+  .catch((err) => {
+    return res.status(401).json({
+      success : false,
+      message: err.message
+    });
+  });
+});
+
+module.exports = router;
+					</code>
+				</pre>
+				
+			</div>
+		</section>
+	<!-- Contract -->
+			
+		<section id="contract" class="wrapper style1 align-center">
+			<div class="inner medium">
+
+				<h2 id="content">Contract</h2>
+				
+				<h3>Request</h3>
+				<pre class="align-left">
+					<code>
+POST -> https://test.bit.blockpool.io/transactions/:ticker/calculatefee
+{
+  originwalletuniqueidentifier : unique identifier of origin wallet,
+  destinationwalletuniqueidentifier : unique identifier of destination wallet (optional if destinationaddress provided),
+  destinationaddress : address to send funds to (optional if destinationwalletuniqueidentifier provided),
+  amount : amount to send
+}
+					</code>
+				</pre>
+				<h3>Response</h3>
+				<pre class="align-left">
+					<code>
+{
+  success: true,
+  totalfee: 'float representing the expected total fee for the proposed transaction'
+}
+					</code>
+				</pre>
+			</div>
+		</section>
+
+		<section class="wrapper style1 align-center">
+				<div class="inner medium">
+					<a href="../index.html#transactions" class="button alt">Go Back</a>
+				</div>
+		</section>
+		<footer class="wrapper style1 align-center">
+        <div class="inner">
+          <p>&copy; Blockpool. Design: <a href="https://html5up.net">HTML5 UP</a>.</p>
+        </div>
+      </footer>
+    </div>
+  
+      <!-- Scripts -->
+      <script src="../../assets/js/jquery.min.js"></script>
+      <script src="../../assets/js/skel.min.js"></script>
+      <script src="../../assets/js/util.js"></script>
+      <script src="../../assets/js/main.js"></script>
+
+	</body>
+</html>

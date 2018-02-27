@@ -1,58 +1,59 @@
 <!DOCTYPE HTML>
 <!--
-	Typify by TEMPLATED
-	templated.co @templatedco
-	Released for free under the Creative Commons Attribution 3.0 license (templated.co/license)
+	Story by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
 -->
 <html>
 	<head>
-		<title>List locations associated with your application</title>
+		<title>Blockpool API Documentation - List locations associated with your application</title>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
-		<!--[if lte IE 8]><script src="../../../assets/js/ie/html5shiv.js"></script><![endif]-->
 		<link rel="stylesheet" href="../../../assets/css/main.css" />
-		<!--[if lte IE 9]><link rel="stylesheet" href="../../../assets/css/ie9.css" /><![endif]-->
 	</head>
 	<body>
-	<!-- Banner -->
-		<section id="banner">
-			<h2><strong>List Locations</strong> associated with your application</h2>
-			<p>BiT Trusted :: locations</p>
-			<ul class="actions">
-				<li><a href="#demo" class="button special">Working Demo</a></li>
-				<li><a href="#code" class="button special">Sample Code</a></li>
-				<li><a href="#contract" class="button special">Contract</a></li>
-			</ul>
-			<a href="../index.html#locations" class="button alt">Go Back</a>
-		</section>
-
-	<!-- Demo -->
-		<section id="demo" class="wrapper style2 special">
-			<div class="inner narrow">
-				<header>
-					<h2>List locations associated with your application</h2>
-        </header>
-				<form class="grid-form" method="post" action="/trusted/locations/list_locations">
-					<div class="form-control">
+    <div id="wrapper" class="divided">    
+      <section class="banner style1 orient-left content-align-left image-position-right fullscreen onload-image-fade-in onload-content-fade-right">
+        <div class="content">
+          <h1>List locations associated with your application</h1>
+          <p>BiT Trusted :: accounts</p>
+          <ul class="actions horizontal">
+              <li><a href="#demo" class="button big wide smooth-scroll-middle">Working Demo</a></li>
+              <li><a href="#code" class="button big wide smooth-scroll-middle">Sample Code</a></li>
+            <li><a href="#contract" class="button big wide smooth-scroll-middle">Contract</a></li>
+          </ul>
+          <a href="../index.html#locations" class="button alt center">Go Back</a>
+        </div>
+        <div class="image">
+          <img src="../../../images/banner.jpg" alt="" />
+        </div>
+      </section>
+    <!-- Demo -->
+    <section id="demo" class="wrapper style1 align-center">
+      <div class="inner medium">
+        <h2>Working Example - List locations</h2>
+        <form method="post" action="/trusted/locations/list_locations">
+          <div class="field">
             <label for="showinactive">Include inactive in list (optional parameter)</label>
-            <div class="select-wrapper">
-              <select name="showinactive" id="showinactive">
-                  <option value="">Blank</option>
-                  <option value="false">False</option>
-                <option value="true">True</option>
-              </select>
-            </div>
-          </div>		
-					<ul class="actions">
-						<li><input value="List Locations" type="submit"></li>
-					</ul>
-				</form>
-			</div>
-		</section>
+            <select name="showinactive" id="showinactive">
+                <option value="">Blank</option>
+                <option value="false">False</option>
+              <option value="true">True</option>
+            </select>
+          </div>
+          <ul class="actions">
+            <li><input type="submit" name="submit" id="submit" value="List locations" /></li>
+          </ul>
+        </form>
+
+      </div>
+    </section>
+
+
 	<!-- Code -->
 		
-		<section id="code" class="wrapper">
-			<div class="inner">
+		<section id="code" class="wrapper style1 align-center">
+			<div class="inner medium">
 
 				<h2 id="content">Sample Code</h2>
 				<p>
@@ -61,7 +62,7 @@
 				<p>
 					The code below accepts a POST request via an express endpoint. The apipublickey and apiprivatekey are stored in config. 
 				</p>
-				<pre>
+				<pre class="align-left">
 					<code>
 'use strict';
 const express = require('express');
@@ -131,22 +132,21 @@ module.exports = router;
 				
 			</div>
 		</section>
-		<hr />
 	<!-- Contract -->
 			
-		<section id="contract" class="wrapper">
-			<div class="inner">
+		<section id="contract" class="wrapper style1 align-center">
+			<div class="inner medium">
 
 				<h2 id="content">Contract</h2>
 				
 				<h3>Request</h3>
-				<pre>
+				<pre class="align-left">
 					<code>
 GET -> https://test.bit.blockpool.io/organisations/locations?showinactive=true/false
 					</code>
 				</pre>
 				<h3>Response</h3>
-				<pre>
+				<pre class="align-left">
 					<code>
 {
   success: true,
@@ -162,28 +162,23 @@ GET -> https://test.bit.blockpool.io/organisations/locations?showinactive=true/f
 			</div>
 		</section>
 
-		<hr />
-
-		<section class="wrapper special">
-				<div class="inner">
+		<section class="wrapper style1 align-center">
+				<div class="inner medium">
 					<a href="../index.html#locations" class="button alt">Go Back</a>
 				</div>
 		</section>
-		
-
-		<!-- Footer -->
-        <footer id="footer">
-            <div class="copyright">
-                &copy; Blockpool Samples. Design: <a href="http://templated.co/">TEMPLATED</a>.
-            </div>
-        </footer>
-
-		<!-- Scripts -->
-			<script src="../../../assets/js/jquery.min.js"></script>
-			<script src="../../../assets/js/skel.min.js"></script>
-			<script src="../../../assets/js/util.js"></script>
-			<!--[if lte IE 8]><script src="../../../assets/js/ie/respond.min.js"></script><![endif]-->
-			<script src="../../../assets/js/main.js"></script>
+		<footer class="wrapper style1 align-center">
+        <div class="inner">
+          <p>&copy; Blockpool. Design: <a href="https://html5up.net">HTML5 UP</a>.</p>
+        </div>
+      </footer>
+    </div>
+  
+      <!-- Scripts -->
+      <script src="../../assets/js/jquery.min.js"></script>
+      <script src="../../assets/js/skel.min.js"></script>
+      <script src="../../assets/js/util.js"></script>
+      <script src="../../assets/js/main.js"></script>
 
 	</body>
 </html>

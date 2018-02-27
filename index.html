@@ -1,109 +1,128 @@
 <!DOCTYPE HTML>
 <!--
-	Based on Typify by TEMPLATED
-	templated.co @templatedco
-	Released for free under the Creative Commons Attribution 3.0 license (templated.co/license)
+	Story by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
 -->
 <html>
 	<head>
-		<title>BiT Examples</title>
+		<title>Blockpool API Documentation</title>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
-		<!--[if lte IE 8]><script src="assets/js/ie/html5shiv.js"></script><![endif]-->
 		<link rel="stylesheet" href="assets/css/main.css" />
-		<!--[if lte IE 9]><link rel="stylesheet" href="assets/css/ie9.css" /><![endif]-->
 	</head>
 	<body>
 
-		<!-- Banner -->
-			<section id="banner">
-				<h2><strong>Documentation</strong> and Working Examples of BiT</h2>
-				<p>Brought to you by Blockpool</p>
-				<ul class="actions">
-					<li><a href="#intro" class="button special">Get started</a></li>
-				</ul>
-			</section>
+		<!-- Wrapper -->
+			<div id="wrapper" class="divided">
 
-			<section id="intro" class="wrapper special">
-				<div class="inner">
-					<header class="major">
-						<h2>Introduction</h2>
-					</header>
-					<p>
-						BiT is a ReSTful JSON API that allows anyone to quickly and easily integrate their existing systems with the blockchain.
-					</p>
-					<p>
-						Within these pages you can find documentation, simple code snippets and working examples to speed your integration and also help you understand the 
-						scope and utility of BiT.
-					</p> 
-    			</div>
-			</section>
+				<!-- One -->
+					<section class="banner style1 orient-left content-align-left image-position-right fullscreen onload-image-fade-in onload-content-fade-right">
+						<div class="content">
+							<h1>Blockpool Documentation</h1>
+							<p class="major">
+                Documentation and Working Examples of BiT, brought to you by <a href="https://www.blockpool.io" target="_blank">Blockpool</a>
+              </p>
+							<ul class="actions vertical">
+								<li><a href="#intro" class="button big wide smooth-scroll-middle">Get Started</a></li>
+							</ul>
+						</div>
+						<div class="image">
+							<img src="images/banner.jpg" alt="" />
+						</div>
+					</section>
 
-			<section id="howtouse" class="wrapper style2">
-				<div class="inner">
-					<header class="major">
-						<h2>How to use this guide</h2>
-					</header>
-					<p>
-						There are three ways you can use BiT. This is explained in the section below. Within each section is a list of the functional
-						"plugins" that are available. Just click through to the area you are interested in. The working samples integrate with the
-						Blockpool test system.
-					</p>                  
-    			</div>
-			</section>
+				<!-- Introduction -->
+					<section class="spotlight style1 orient-right content-align-left image-position-center onscroll-image-fade-in" id="intro">
+						<div class="content">
+							<h2>Introduction</h2>
+							<p>
+                BiT is a ReSTful JSON API that allows anyone to quickly and easily integrate their existing systems with the blockchain.
+              </p>
+              <p>
+                Within these pages you can find documentation, simple code snippets and working examples to speed your integration and also help you understand the 
+                scope and utility of BiT.
+              </p>
+							<ul class="actions vertical">
+								<li><a href="#howtouse" class="button big wide smooth-scroll-middle">How to use</a></li>
+							</ul>
+						</div>
+						<div class="image">
+							<img src="images/spotlight01.jpg" alt="" />
+						</div>
+					</section>
 
-			<section id="plugins" class="wrapper">
-				<div class="inner">
-					<h3 id="authenticated">BiT Authenticated</h3>
-					<p>
-						With BiT Authenticated the BiT is responsible for everything.
-					</p>
-					<p>
-						It holds user details, manages and maintains passwords and will even act as an authentication engine for your own application, providing
-						a JWT on login that you can use to decorate requests to BiT and also validate (using standard JWT) requests to your own API.
-					</p>
-					<p>
-						<a href="#authenticated" class="button alt disabled"><i class="fas fa-key"></i> BiT Authenticated Documentation</a>
-					</p>
-					<h3 id="trusted">BiT Trusted</h3>
-					<p>
-						BiT Trusted is ideal if you already have authentication and want to integrate BiT seamlessly with your existing system.
-					</p>
-					<p>
-						In this case your user provides their permission for BiT to trust your requests for resources that you have permission for. Once trust
-						has been established between your user and us you will be able to act without asking again. Of course the user can revoke this
-						trust and we encourage you to offer that option via your own interface though the user will always be able to use our own myBlockpool
-						interface to do this.
-					</p>
-					<p>
-						<a href="examples/trusted/index.html" class="button alt"><i class="fas fa-key"></i> BiT Trusted Documentation</a>
-          </p>
-          <h3 id="paas">PaaS</h3>
-          <p>
-            PaaS is a very cut down implementation ideal if you do not want to give BiT any user information.
-          </p>
-          <p>
-            In this case you do not provide any identifiable information for your customer to BiT at all; all authentication is carried out by
-            your own application. It allows you to develop any technology you want on top of the blockchain, leaving you free to develop your IP without distraction.
-          </p>
-          <p>
-            <a href="examples/paas/index.html" class="button alt"><i class="fas fa-key"></i> PaaS Documentation</a>
-          </p>
-    		</div>
-			</section>
+				<!-- how to use -->
+        <section class="wrapper style1 align-center" id="howtouse">
+          <div class="inner">
+            <h2>How to use this guide</h2>
+            <p>
+              There are three ways you can use BiT, listed below. Within each section is a list of the functional "plugins" that are available. Click through to the area 
+              you are interested in. The working samples integrate with the Blockpool test system.
+            </p>
+            <div class="items style1 medium onscroll-fade-in">
+              <section>
+                <span class="fas fa-gem"></span>
+                <h3>BiT Authenticated</h3>
+                <p>
+                    With BiT Authenticated the BiT is responsible for everything.
+                  </p>
+                  <p>
+                    It holds user details, manages and maintains passwords and will even act as an authentication engine for your own application, providing
+                    a JWT on login that you can use to decorate requests to BiT and also validate (using standard JWT) requests to your own API.
+                  </p>
+                  <p>
+                    <a href="#authenticated" class="button alt disabled"><i class="fas fa-key"></i> View Documentation</a>
+                  </p>
+              </section>
+              <section>
+                <span class="fas fa-gem"></span>
+                <h3>BiT Trusted</h3>
+                <p>
+                    BiT Trusted is ideal if you already have authentication and want to integrate BiT seamlessly with your existing system.
+                  </p>
+                  <p>
+                    In this case your user provides their permission for BiT to trust your requests for resources that you have permission for. Once trust
+                    has been established between your user and us you will be able to act without asking again. Of course the user can revoke this
+                    trust and we encourage you to offer that option via your own interface though the user will always be able to use our own myBlockpool
+                    interface to do this.
+                  </p>
+                  <p>
+                    <a href="examples/trusted/index.html" class="button alt"><i class="fas fa-key"></i> View Documentation</a>
+                  </p>
+              </section>
+              <section>
+                <span class="fas fa-gem"></span>
+                <h3>PaaS</h3>
+                <p>
+                    PaaS is a very cut down implementation ideal if you do not want to give BiT any user information.
+                  </p>
+                  <p>
+                    In this case you do not provide any identifiable information for your customer to BiT at all; all authentication is carried out by
+                    your own application. It allows you to develop any technology you want on top of the blockchain, leaving you free to develop your IP without distraction.
+                  </p>
+                  <p>
+                    <a href="examples/paas/index.html" class="button alt"><i class="fas fa-key"></i> View Documentation</a>
+                  </p>
+              </section>
+            </div>
+          </div>
+        </section>
 
-		<!-- Footer -->
-			<footer id="footer">
-				<div class="copyright">
-					&copy; Blockpool Samples. Design: <a href="http://templated.co/">TEMPLATED</a>.
-				</div>
-			</footer>
+
+				<!-- Footer -->
+					<footer class="wrapper style1 align-center">
+						<div class="inner">
+							<p>&copy; Blockpool. Design: <a href="https://html5up.net">HTML5 UP</a>.</p>
+						</div>
+					</footer>
+
+			</div>
 
 		<!-- Scripts -->
 			<script src="assets/js/jquery.min.js"></script>
 			<script src="assets/js/skel.min.js"></script>
 			<script src="assets/js/util.js"></script>
-			<!--[if lte IE 8]><script src="assets/js/ie/respond.min.js"></script><![endif]-->
 			<script src="assets/js/main.js"></script>
 
 	</body>

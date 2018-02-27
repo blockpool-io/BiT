@@ -1,57 +1,59 @@
 <!DOCTYPE HTML>
 <!--
-	Typify by TEMPLATED
-	templated.co @templatedco
-	Released for free under the Creative Commons Attribution 3.0 license (templated.co/license)
+	Story by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
 -->
 <html>
 	<head>
-		<title>Associate a new or existing BiT account with your system</title>
+		<title>Blockpool API Documentation - Associate a new or existing BiT account with your system</title>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
-		<!--[if lte IE 8]><script src="../../../assets/js/ie/html5shiv.js"></script><![endif]-->
 		<link rel="stylesheet" href="../../../assets/css/main.css" />
-		<!--[if lte IE 9]><link rel="stylesheet" href="../../../assets/css/ie9.css" /><![endif]-->
 	</head>
 	<body>
-	<!-- Banner -->
-		<section id="banner">
-			<h2><strong>Associate</strong> a new or existing BiT account with your system</h2>
-			<p>BiT Trusted :: wallets</p>
-			<ul class="actions">
-				<li><a href="#demo" class="button special">Working Demo</a></li>
-				<li><a href="#code" class="button special">Sample Code</a></li>
-				<li><a href="#contract" class="button special">Contract</a></li>
-			</ul>
-			<a href="../index.html#accounts" class="button alt">Go Back</a>
-		</section>
+    <div id="wrapper" class="divided">    
+      <section class="banner style1 orient-left content-align-left image-position-right fullscreen onload-image-fade-in onload-content-fade-right">
+        <div class="content">
+          <h1>Associate a new or existing BiT account with your system</h1>
+          <p>BiT Trusted :: accounts</p>
+          <ul class="actions horizontal">
+              <li><a href="#demo" class="button big wide smooth-scroll-middle">Working Demo</a></li>
+              <li><a href="#code" class="button big wide smooth-scroll-middle">Sample Code</a></li>
+            <li><a href="#contract" class="button big wide smooth-scroll-middle">Contract</a></li>
+          </ul>
+          <a href="../index.html#accounts" class="button alt center">Go Back</a>
+        </div>
+        <div class="image">
+          <img src="../../../images/banner.jpg" alt="" />
+        </div>
+      </section>
+    <!-- Demo -->
+    <section id="demo" class="wrapper style1 align-center">
+      <div class="inner medium">
+        <h2>Working Example - Associate Account</h2>
+        <form method="post" action="/trusted/wallets/associate">
+          <div class="field half first">
+            <label for="email">Email</label>
+            <input name="email" id="email" type="email">
+          </div>
+          <div class="field half first">
+            <label for="password">Email</label>
+            <input name="password" id="password" type="password">
+          </div>
+          <ul class="actions">
+            <li><input type="submit" name="submit" id="submit" value="Associate Account" /></li>
+          </ul>
+        </form>
 
-	<!-- Demo -->
-		<section id="demo" class="wrapper style2 special">
-			<div class="inner narrow">
-				<header>
-					<h2>Associate Account</h2>
-				</header>
-				<form class="grid-form" method="post" action="/trusted/wallets/associate">
-					<div class="form-control narrow">
-						<label for="email">Email</label>
-						<input name="email" id="email" type="email">
-					</div>
-					<div class="form-control narrow">
-						<label for="password">Password</label>
-						<input name="password" id="password" type="password">
-					</div>
-					<ul class="actions">
-						<li><input value="Associate Account" type="submit"></li>
-					</ul>
-				</form>
-			</div>
-		</section>
+      </div>
+    </section>
+
 
 	<!-- Code -->
 		
-		<section id="code" class="wrapper">
-			<div class="inner">
+		<section id="code" class="wrapper style1 align-center">
+			<div class="inner medium">
 
 				<h2 id="content">Sample Code</h2>
 				<p>
@@ -61,7 +63,7 @@
 				<p>
 					The code below accepts a POST request via an express endpoint. The apipublickey and apiprivatekey are stored in config. 
 				</p>
-				<pre>
+				<pre class="align-left">
 					<code>
 'use strict';
 const express = require('express');
@@ -131,16 +133,15 @@ module.exports = router;
 				
 			</div>
 		</section>
-		<hr />
 	<!-- Contract -->
 			
-		<section id="contract" class="wrapper">
-			<div class="inner">
+		<section id="contract" class="wrapper style1 align-center">
+			<div class="inner medium">
 
 				<h2 id="content">Contract</h2>
 				
 				<h3>Request</h3>
-				<pre>
+				<pre class="align-left">
 					<code>
 POST -> https://test.bit.blockpool.io/organisations/users
 
@@ -151,7 +152,7 @@ POST -> https://test.bit.blockpool.io/organisations/users
 					</code>
 				</pre>
 				<h3>Response</h3>
-				<pre>
+				<pre class="align-left">
 					<code>
 {
   success: true,
@@ -162,28 +163,23 @@ POST -> https://test.bit.blockpool.io/organisations/users
 			</div>
 		</section>
 
-		<hr />
-
-		<section class="wrapper special">
-				<div class="inner">
+		<section class="wrapper style1 align-center">
+				<div class="inner medium">
 					<a href="../index.html#accounts" class="button alt">Go Back</a>
 				</div>
 		</section>
-		
-
-		<!-- Footer -->
-        <footer id="footer">
-            <div class="copyright">
-                &copy; Blockpool Samples. Design: <a href="http://templated.co/">TEMPLATED</a>.
-            </div>
-        </footer>
-
-		<!-- Scripts -->
-			<script src="../../../assets/js/jquery.min.js"></script>
-			<script src="../../../assets/js/skel.min.js"></script>
-			<script src="../../../assets/js/util.js"></script>
-			<!--[if lte IE 8]><script src="../../../assets/js/ie/respond.min.js"></script><![endif]-->
-			<script src="../../../assets/js/main.js"></script>
+		<footer class="wrapper style1 align-center">
+        <div class="inner">
+          <p>&copy; Blockpool. Design: <a href="https://html5up.net">HTML5 UP</a>.</p>
+        </div>
+      </footer>
+    </div>
+  
+      <!-- Scripts -->
+      <script src="../../assets/js/jquery.min.js"></script>
+      <script src="../../assets/js/skel.min.js"></script>
+      <script src="../../assets/js/util.js"></script>
+      <script src="../../assets/js/main.js"></script>
 
 	</body>
 </html>
