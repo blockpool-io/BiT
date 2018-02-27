@@ -16,6 +16,7 @@ app.use(bodyParser.json());
 
 app.use("/examples", express.static(__dirname + '/examples'));
 app.use("/assets", express.static(__dirname + '/assets'));
+app.use("/images", express.static(__dirname + '/images'));
 
 app.use('/trusted', require('./routes/trusted'));
 app.use('/paas', require('./routes/paas'));
