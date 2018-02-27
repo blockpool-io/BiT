@@ -6,7 +6,7 @@
 -->
 <html>
 	<head>
-		<title>Blockpool API Documentation - List locations associated with your application</title>
+		<title>Blockpool API Documentation - Record a movement at a Reward Location</title>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<link rel="stylesheet" href="../../../assets/css/main.css" />
@@ -15,7 +15,7 @@
     <div id="wrapper" class="divided">    
       <section class="banner style1 orient-left content-align-left image-position-right fullscreen onload-image-fade-in onload-content-fade-right">
         <div class="content">
-          <h1>List locations associated with your application</h1>
+          <h1>Record a movement at a Reward Location</h1>
           <p>BiT Trusted :: locations</p>
           <ul class="actions horizontal">
               <li><a href="#demo" class="button big wide smooth-scroll-middle">Working Demo</a></li>
@@ -31,18 +31,26 @@
     <!-- Demo -->
     <section id="demo" class="wrapper style1 align-center">
       <div class="inner medium">
-        <h2>Working Example - List locations</h2>
-        <form method="post" action="/trusted/locations/list_locations">
-          <div class="field">
-            <label for="showinactive">Include inactive in list (optional parameter)</label>
-            <select name="showinactive" id="showinactive">
-                <option value="">Blank</option>
-                <option value="false">False</option>
-              <option value="true">True</option>
-            </select>
+        <h2>Working Example - Record Movement</h2>
+        <form method="post" action="/trusted/locations/record_movement">
+          <div class="field half">
+            <label for="bitid">bitid of mover</label>
+            <input name="bitid" id="bitid" type="text"> <!-- 59f05849dfe2092d14d98d14 -->
+          </div>
+          <div class="field half">
+            <label for="timestamp">timestamp (UTC)</label>
+            <input name="timestamp" id="timestamp" type="text">
+          </div>
+          <div class="field half">
+            <label for="latitude">latitude</label>
+            <input name="latitude" id="latitude" type="text"> <!-- WBX reward at 0,0 -->
+          </div>
+          <div class="field half">
+            <label for="longitude">longitude</label>
+            <input name="longitude" id="longitude" type="text">
           </div>
           <ul class="actions">
-            <li><input type="submit" name="submit" id="submit" value="List locations" /></li>
+            <li><input type="submit" name="submit" id="submit" value="Record Movement" /></li>
           </ul>
         </form>
 
@@ -57,53 +65,40 @@
 
 				<h2 id="content">Sample Code</h2>
 				<p>
-					Simply decorate your request with the correct headers (apipublickey and apihashedkey) and call the correct endpoint.
+					Simply decorate your request with the correct headers (apipublickey and apihashedkey) and pass over the email address and password
+					you have collected.
 				</p>
 				<p>
 					The code below accepts a POST request via an express endpoint. The apipublickey and apiprivatekey are stored in config. 
 				</p>
 				<pre class="align-left">
 					<code>
-'use strict';
-const express = require('express');
-const router = express.Router();
-const request = require('request');
-const config = require('../config/config');
-const bcrypt = require('bcrypt');
-
-function hashTheCode(privatekey) {
-  return new Promise((resolve, reject) => {
-    bcrypt.genSalt(10, (err, salt) => {
-      bcrypt.hash(privatekey, salt, (err, apihashedkey) => {
-        if (err) {
-          return reject(err);
-        } else {
-          return resolve(apihashedkey);
-        }
-      });
-    });
-  });
-};
-
 router.post('/', (req, res) => {
-  let showinactive = req.query.showinactive;
+  let bitid = req.body.bitid;
+  let timestamp = req.body.timestamp;
+  let latitude = req.body.latitude;
+  let longitude = req.body.longitude;
 
-  let url = config.urlToBit + '/organisations/locations';
-  if (showinactive !== undefined && showinactive !== '') {
-    url += '?showinactive=' + showinactive;
+  if (!bitid || !timestamp || latitude === undefined || longitude === undefined) {
+    return res.status(400).json({
+      success : false,
+      message : "missing required fields"
+    });
   }
-  hashTheCode(config.apiprivatekey)
+
+  handleBiTHeaders.hashKey(config.apiprivatekey)
   .then((apihashedkey) => {
     let params = {
-      url : url,
+      url : config.urlToBit + '/organisations/movements',
       headers : {
         apipublickey : config.apipublickey,
         apihashedkey : apihashedkey
       },
-      json : true
+      json : true,
+      body: body
     };
 
-    request.get(params, (error, response, body) => {
+    request.post(params, (error, response, body) => {
       if (error) {
         let statusCode = 500;
         if (response) {
@@ -142,7 +137,14 @@ module.exports = router;
 				<h3>Request</h3>
 				<pre class="align-left">
 					<code>
-GET -> https://test.bit.blockpool.io/organisations/locations?showinactive=true/false
+POST -> https://test.bit.blockpool.io/organisations/movements
+
+{
+  bitid : 'bitid of moving user',
+  timestamp : UTC timestamp of time of movement,
+  longitude : longitude of log,
+  latitude : latitude of log
+}
 					</code>
 				</pre>
 				<h3>Response</h3>
@@ -150,12 +152,7 @@ GET -> https://test.bit.blockpool.io/organisations/locations?showinactive=true/f
 					<code>
 {
   success: true,
-  locations : [
-    {
-      locationid : 'id of the location',
-      isactive : 'boolean if the location is active'
-    }
-  ]
+  rewardtriggered : true /false
 }
 					</code>
 				</pre>

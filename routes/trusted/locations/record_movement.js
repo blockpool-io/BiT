@@ -7,26 +7,27 @@ const handleBiTHeaders = require('../../../headerhandler');
 
 router.post('/', (req, res) => {
   let bitid = req.body.bitid;
-  let locationid = req.body.locationid;
-  let destinationwalletid = req.body.destinationwalletid;
-  if (!bitid || !locationid || !destinationwalletid) {
+  let timestamp = req.body.timestamp;
+  let latitude = req.body.latitude;
+  let longitude = req.body.longitude;
+
+  if (!bitid || !timestamp || latitude === undefined || longitude === undefined) {
     return res.status(400).json({
       success : false,
       message : "missing required fields"
     });
   }
-  delete req.body.locationid;
 
   handleBiTHeaders.hashKey(config.apiprivatekey)
   .then((apihashedkey) => {
     let params = {
-      url : config.urlToBit + '/organisations/locations/' + locationid + '/associate',
+      url : config.urlToBit + '/organisations/movements',
       headers : {
         apipublickey : config.apipublickey,
         apihashedkey : apihashedkey
       },
       json : true,
-      body : req.body
+      body: body
     };
 
     request.post(params, (error, response, body) => {
