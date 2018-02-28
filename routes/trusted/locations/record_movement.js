@@ -27,7 +27,7 @@ router.post('/', (req, res) => {
         apihashedkey : apihashedkey
       },
       json : true,
-      body: body
+      body: req.body
     };
 
     request.post(params, (error, response, body) => {
