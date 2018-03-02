@@ -9,7 +9,7 @@ router.post('/', (req, res) => {
   let bitid = req.body.bitid;
   let locationid = req.body.locationid;
   let destinationwalletid = req.body.destinationwalletid;
-  if (!bitid || !locationid || !destinationwalletid) {
+  if (!bitid || !locationid) {
     return res.status(400).json({
       success : false,
       message : "missing required fields"
