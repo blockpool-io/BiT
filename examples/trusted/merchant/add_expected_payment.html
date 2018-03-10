@@ -168,11 +168,14 @@ module.exports = router;
 			<div class="inner medium">
 
 				<h2 id="content">Contract</h2>
+        <p>
+          All payloads are in JSON format.
+        </p>
 				
-				<h3>Request</h3>
+        <h3>Request</h3>
 				<pre class="align-left">
 					<code>
-POST -> https://test.bit.blockpool.io/organisations/merchant/:ticker
+POST -> https://test.bit.blockpool.io/organisations/merchant/{ticker}
 {
   amount : the amount to expect (float - 8dp),
   initialcallbackurl : webhook into client system for notification of unconfirmed payment (string),

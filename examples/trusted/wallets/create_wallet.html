@@ -149,11 +149,14 @@ module.exports = router;
 			<div class="inner medium">
 
 				<h2 id="content">Contract</h2>
+        <p>
+          All payloads are in JSON format.
+        </p>
 				
 				<h3>Request</h3>
 				<pre class="align-left">
 					<code>
-POST -> https://test.bit.blockpool.io/organisations/wallets/:ticker
+POST -> https://test.bit.blockpool.io/organisations/wallets/{ticker}
 
 {
   bitid: 'the user id collected by the call above'
