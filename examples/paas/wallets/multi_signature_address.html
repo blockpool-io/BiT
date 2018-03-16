@@ -1,0 +1,232 @@
+<!DOCTYPE HTML>
+<!--
+	Story by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+	<head>
+		<title>Blockpool API Documentation - Create a Multi-Signature Address on PaaS</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<link rel="stylesheet" href="../../../assets/css/main.css" />
+	</head>
+	<body>
+    <div id="wrapper" class="divided">    
+      <section class="banner style1 orient-left content-align-left image-position-right fullscreen onload-image-fade-in onload-content-fade-right">
+        <div class="content">
+          <h1>Create a Multi-Signature Address</h1>
+          <p>BiT PaaS :: wallets</p>
+          <ul class="actions horizontal">
+            <li><a href="#overview" class="button big wide smooth-scroll-middle">Overview</a></li>
+            <li><a href="#demo" class="button big wide smooth-scroll-middle">Working Demo</a></li>
+            <li><a href="#code" class="button big wide smooth-scroll-middle">Sample Code</a></li>
+            <li><a href="#contract" class="button big wide smooth-scroll-middle">Contract</a></li>
+          </ul>
+          <a href="../index.html#wallets" >Go Back</a>
+        </div>
+        <div class="image">
+          <img src="../../../images/banner.jpg" alt="" />
+        </div>
+      </section>
+      <!-- Demo -->
+      <section id="overview" class="wrapper style1 align-center">
+        <div class="inner medium">
+          <h2>Brief Overview - Create a Multi-Signature Address</h2>
+          <p>
+            You can create a multi signature address with two or more required signaturies. Each signatury is defined by
+            their walletuniqueidentifier. You send funds to a multi signature address in the same way as normal, from any other
+            silo (or from an external source) to the address that is returned when you create the address.
+          </p>
+          <p>
+            To send funds from a multi signature address you must sign the transaction with at least <i>number of signatures required</i>
+            of the walletuniqueidentifiers you set the address up with.
+          </p>
+        </div>
+      </section>
+      <!-- Demo -->
+      <section id="demo" class="wrapper style1 align-center">
+        <div class="inner medium">
+          <h2>Working Example - Create a Multi-Signature Address</h2>
+          <form method="post" action="/paas/wallets/multi_signature_address">
+            <div class="field half">
+              <label for="ticker">Currency</label>
+                <select name="ticker" id="ticker">
+                  <option value="BPL">Blockpool</option>
+                  <option value="BTC">Bitcoin</option>
+                  <option value="WBX">WOOOBux</option>
+                  <option value="ADC">Audiocoin</option>
+                </select>
+            </div>
+            <div class="field half">
+              <label for="numberRequired">number of signatures required (optional)</label>
+              <input name="numberRequired" id="numberRequired" type="text">
+            </div>
+            <div class="field half">
+              <label for="walletuniqueidentifier1">wallet unique identifier 1</label>
+              <input name="walletuniqueidentifier1" id="walletuniqueidentifier1" type="text"> <!-- WBX - 5a8edeaff9c6a127b0ba5b23 --> <!-- ADC - 5aab8ddb5598842320d4e915 -->
+            </div>
+            <div class="field half">
+              <label for="walletuniqueidentifier2">wallet unique identifier 2</label>
+              <input name="walletuniqueidentifier2" id="walletuniqueidentifier2" type="text"> <!-- 5a8edeaff9c6a127b0ba5b23 --> <!-- ADC - 5aab8e0e5598842320d4e917 -->
+            </div>
+            <ul class="actions">
+              <li><input type="submit" name="submit" id="submit" value="Create Address" /></li>
+            </ul>
+          </form>
+
+        </div>
+      </section>
+
+
+    <!-- Code -->
+      
+      <section id="code" class="wrapper style1 align-center">
+        <div class="inner medium">
+
+          <h2>Sample Code</h2>
+          <p>
+            Simply decorate your request with the correct headers (apipublickey and apihashedkey) and pass over the relevant information.
+          </p>
+          <p>
+            The code below accepts a POST request via an express endpoint. The apipublickey and apiprivatekey are stored in config. 
+          </p>
+          <pre class="align-left">
+            <code>
+'use strict';
+const express = require('express');
+const router = express.Router();
+const request = require('request');
+const config = require('../config/config');
+const bcrypt = require('bcrypt');
+
+function hashTheCode(privatekey) {
+  return new Promise((resolve, reject) => {
+    bcrypt.genSalt(10, (err, salt) => {
+      bcrypt.hash(privatekey, salt, (err, apihashedkey) => {
+          if (err) {
+              return reject(err);
+          } else {
+              return resolve(apihashedkey);
+          }
+      });
+    });
+  });
+};
+
+router.post('/', (req, res) => {
+  let ticker = req.body.ticker;
+  let numberRequired = req.body.numberRequired;
+  let walletuniqueidentifier1 = req.body.walletuniqueidentifier1;
+  let walletuniqueidentifier2 = req.body.walletuniqueidentifier2;
+  if (!ticker || !walletuniqueidentifier1 || !walletuniqueidentifier2) {
+      return res.status(400).json({
+          success : false,
+          message : "missing required fields"
+      });
+  }
+
+  let newBody = {
+    numberRequired : numberRequired,
+    walletuniqueidentifiers : [
+      walletuniqueidentifier1,
+      walletuniqueidentifier2
+    ]
+  }
+
+  hashTheCode(config.apiprivatekey)
+  .then((apihashedkey) => {
+      let params = {
+          url : config.urlToBit + '/wallets/' + ticker.toLowerCase() + '/multisignature',
+          headers : {
+              apipublickey : config.apipublickey,
+              apihashedkey : apihashedkey
+          },
+          json : true,
+          body: newBody
+      };
+  
+      request.post(params, (error, response, body) => {
+          if (error) {
+              let statusCode = 500;
+              if (response) {
+                  statusCode = response.statusCode;
+              }
+              return res.status(statusCode).json({
+                  success : false,
+                  message: error,message
+              });
+          } else {
+              return res.status(response.statusCode).json(body);
+          }
+      });
+  })
+  .catch((err) => {
+      return res.status(401).json({
+          success : false,
+          message: err.message
+      });
+  });
+});
+
+module.exports = router;
+					</code>
+				</pre>
+				
+			</div>
+		</section>
+	<!-- Contract -->
+			
+		<section id="contract" class="wrapper style1 align-center">
+			<div class="inner medium">
+
+				<h2>Contract</h2>
+        <p>
+          All payloads are in JSON format.
+        </p>
+				
+				<h3>Request</h3>
+				<pre class="align-left">
+					<code>
+POST -> https://test.bit.blockpool.io/wallets/{ticker}/multisignature
+
+{
+  walletuniqueidentifiers: 'an array of wallet unique identifiers from which to select an address with which to sign transactions for this address',
+  numberRequired: 'how many of the walletuniqueidentifiers need to sign for any tx to be approved'
+}
+					</code>
+				</pre>
+				<h3>Response</h3>
+				<pre class="align-left">
+					<code>
+{
+  success: true,
+  multisignatureaddress: 'the address of the newly created multisignature address'
+}
+					</code>
+				</pre>
+			</div>
+		</section>
+
+		<section class="wrapper style1 align-center">
+				<div class="inner medium">
+					<a href="../index.html#wallets" >Go Back</a>
+				</div>
+		</section>
+		<footer class="wrapper style1 align-center">
+        <div class="inner">
+          <p>&copy; Blockpool. Design: <a href="https://html5up.net">HTML5 UP</a>.</p>
+        </div>
+      </footer>
+    </div>
+  
+      <!-- Scripts -->
+      <script src="../../../assets/js/jquery.min.js"></script>
+			<script src="../../../assets/js/jquery.scrollex.min.js"></script>
+			<script src="../../../assets/js/jquery.scrolly.min.js"></script>
+      <script src="../../../assets/js/skel.min.js"></script>
+      <script src="../../../assets/js/util.js"></script>
+      <script src="../../../assets/js/main.js"></script>
+
+	</body>
+</html>
