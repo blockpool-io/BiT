@@ -51,8 +51,12 @@
             <input name="originwalletuniqueidentifier" id="originwalletuniqueidentifier" type="text"> <!-- 5a8edeaff9c6a127b0ba5b23 (BPL) 5a8f013a21e6124d00795f9f (WBX) -->
           </div>
           <div class="field">
-            <label for="comment">Comment (optional)</label>
+            <label for="comment">Comment (optional - internal only)</label>
             <textarea name="comment" id="comment" rows="4"></textarea>
+          </div>
+          <div class="field">
+            <label for="textpayload">Text Payload (additional charge - max length 70 chars)</label>
+            <input name="textpayload" id="textpayload" maxlength="70" type="text">
           </div>
           <h4>Either :: send to another trusted account</h4>
           <div class="field">
@@ -122,6 +126,7 @@ router.post('/', (req, res) => {
     });
   }
   let comment = req.body.comment;
+  let textpayload = req.body.textpayload;
 
   hashTheCode(config.apiprivatekey)
   .then((apihashedkey) => {
@@ -137,7 +142,8 @@ router.post('/', (req, res) => {
         comment : comment,
         originwalletuniqueidentifier : originwalletuniqueidentifier,
         destinationwalletuniqueidentifier : destinationwalletuniqueidentifier,
-        destinationaddress : destinationaddress
+        destinationaddress : destinationaddress,
+        textpayload : textpayload
       }
     };
 

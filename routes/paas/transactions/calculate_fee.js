@@ -19,6 +19,8 @@ router.post('/', (req, res) => {
     });
   }
 
+  let textpayload = req.body.textpayload;
+
   handleBiTHeaders.hashKey(config.apiprivatekey)
   .then((apihashedkey) => {
     let params = {
@@ -32,7 +34,8 @@ router.post('/', (req, res) => {
         amount : amount,
         originwalletuniqueidentifier : originwalletuniqueidentifier,
         destinationwalletuniqueidentifier : destinationwalletuniqueidentifier,
-        destinationaddress : destinationaddress
+        destinationaddress : destinationaddress,
+        textpayload : textpayload
       }
     };
 

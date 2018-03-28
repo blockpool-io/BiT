@@ -11,6 +11,7 @@ router.post('/', (req, res) => {
   let originwalletuniqueidentifier = req.body.originwalletuniqueidentifier;
   let destinationwalletuniqueidentifier = req.body.destinationwalletuniqueidentifier;
   let destinationaddress = req.body.destinationaddress;
+  let textpayload = req.body.textpayload;
 
   if (!ticker || !amount || !originwalletuniqueidentifier || (!destinationwalletuniqueidentifier && !destinationaddress)) {
     return res.status(400).json({

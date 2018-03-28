@@ -50,6 +50,10 @@
             <label for="originwalletuniqueidentifier">origin wallet unique identifier</label>
             <input name="originwalletuniqueidentifier" id="originwalletuniqueidentifier" type="text"> <!-- 5a8edeaff9c6a127b0ba5b23 (BPL) 5a8f013a21e6124d00795f9f (WBX) -->
           </div>
+          <div class="field">
+            <label for="textpayload">Text Payload (additional charge - max length 70 chars)</label>
+            <input name="textpayload" id="textpayload" maxlength="70" type="text">
+          </div>
           <h4>Either :: send to another trusted account</h4>
           <div class="field">
             <label for="destinationwalletuniqueidentifier">destination wallet unique identifier</label>
@@ -118,6 +122,8 @@ router.post('/', (req, res) => {
     });
   }
 
+  let textpayload = req.body.textpayload;
+
   hashTheCode(config.apiprivatekey)
   .then((apihashedkey) => {
     let params = {
@@ -131,7 +137,8 @@ router.post('/', (req, res) => {
         amount : amount,
         originwalletuniqueidentifier : originwalletuniqueidentifier,
         destinationwalletuniqueidentifier : destinationwalletuniqueidentifier,
-        destinationaddress : destinationaddress
+        destinationaddress : destinationaddress,
+        textpayload : textpayload
       }
     };
 
