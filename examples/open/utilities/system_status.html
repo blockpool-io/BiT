@@ -1,0 +1,101 @@
+<!DOCTYPE HTML>
+<!--
+	Story by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+	<head>
+		<title>Blockpool API Documentation - BiT System Status</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<link rel="stylesheet" href="../../../assets/css/main.css" />
+	</head>
+	<body>
+    <div id="wrapper" class="divided">    
+      <section class="banner style1 orient-left content-align-left image-position-right fullscreen onload-image-fade-in onload-content-fade-right">
+        <div class="content">
+          <h1>BiT Open :: BiT System Status</h1>
+          <p>A dummy call to return headers which will inform you of the current systems status of BiT</p>
+          <ul class="actions horizontal">
+              <li><a href="#demo" class="button big wide smooth-scroll-middle">Working Demo</a></li>
+              <li><a href="#code" class="button big wide smooth-scroll-middle">Sample Code</a></li>
+            <li><a href="#contract" class="button big wide smooth-scroll-middle">Contract</a></li>
+          </ul>
+          <a href="../index.html#wallets" >Go Back</a>
+        </div>
+        <div class="image">
+          <img src="../../../images/banner.jpg" alt="" />
+        </div>
+      </section>
+    <!-- Demo -->
+    <section id="demo" class="wrapper style1 align-center">
+      <div class="inner medium">
+        <h2>Working Example - BiT System Status</h2>
+        Click <a href="https://test.bit.blockpool.io/insecure/utilities/systemstatus">here</a> to call the endpoint
+      </div>
+    </section>
+
+
+	<!-- Code -->
+		
+		<section id="code" class="wrapper style1 align-center">
+			<div class="inner medium">
+
+				<h2 id="content">Sample Code</h2>
+				<p>
+					This is a simple GET call.
+				</p>				
+			</div>
+		</section>
+	<!-- Contract -->
+			
+		<section id="contract" class="wrapper style1 align-center">
+			<div class="inner medium">
+
+				<h2 id="content">Contract</h2>
+        <p>
+          All payloads are in JSON format.
+        </p>
+				
+				<h3>Request</h3>
+				<pre class="align-left">
+					<code>
+GET -> https://test.bit.blockpool.io/insecure/utilities/systemstatus
+					</code>
+				</pre>
+        <h3>Response</h3>
+        <p>
+          This call does nothing but return the current service status headers for you to query. These headers are:
+        </p>
+				<pre class="align-left">
+					<code>
+"bit-service-method" - undefined, or a message explaining the current status if set
+"bit-service-status" - "active" or "maintenance"
+					</code>
+				</pre>
+			</div>
+		</section>
+
+		<section class="wrapper style1 align-center">
+				<div class="inner medium">
+					<a href="../index.html#wallets" >Go Back</a>
+				</div>
+		</section>
+		<footer class="wrapper style1 align-center">
+        <div class="inner">
+          <p>&copy; Blockpool. Design: <a href="https://html5up.net">HTML5 UP</a>.</p>
+        </div>
+      </footer>
+    </div>
+  
+      <!-- Scripts -->
+      <script src="../../../assets/js/jquery.min.js"></script>
+			<script src="../../../assets/js/jquery.scrollex.min.js"></script>
+			<script src="../../../assets/js/jquery.scrolly.min.js"></script>
+      <script src="../../../assets/js/skel.min.js"></script>
+      <script src="../../../assets/js/util.js"></script>
+      <script src="../../../assets/js/main.js"></script>
+
+	</body>
+</html>
