@@ -5,4 +5,5 @@ var app = module.exports = express();
 
 app.use('/wallets', require('./wallets'));
 app.use('/transactions', require('./transactions'));
+app.use('/merchant', require('./merchant'));
 
