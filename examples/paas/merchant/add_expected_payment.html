@@ -16,7 +16,7 @@
       <section class="banner style1 orient-left content-align-left image-position-right fullscreen onload-image-fade-in onload-content-fade-right">
         <div class="content">
           <h1>Add Expected Payment</h1>
-          <p>BiT Trusted :: merchant</p>
+          <p>BiT Paas :: merchant</p>
           <ul class="actions horizontal">
               <li><a href="#demo" class="button big wide smooth-scroll-middle">Working Demo</a></li>
               <li><a href="#code" class="button big wide smooth-scroll-middle">Sample Code</a></li>
@@ -51,20 +51,20 @@
             <input name="originwalletuniqueidentifier" id="originwalletuniqueidentifier" type="text"> <!-- 5a8edeaff9c6a127b0ba5b23 (BPL) 5a8f013a21e6124d00795f9f (WBX) -->
           </div>
           <div class="field">
-            <label for="clientforeignkey">unique foreign key</label>
-            <input name="clientforeignkey" id="clientforeignkey" type="text">
+            <label for="clientForeignKey">unique foreign key</label>
+            <input name="clientForeignKey" id="clientForeignKey" type="text">
           </div>
           <div class="field">
-            <label for="initialcallbackurl">initial callback url (webhook in client system)</label>
-            <input name="initialcallbackurl" id="initialcallbackurl" type="text">
+            <label for="initialCallbackUrl">initial callback url (webhook in client system)</label>
+            <input name="initialCallbackUrl" id="initialCallbackUrl" type="text">
           </div>
           <div class="field">
-            <label for="confirmationcallbackurl">confirmation callback url (webhook in client system)</label>
-            <input name="confirmationcallbackurl" id="confirmationcallbackurl" type="text">
+            <label for="confirmationCallbackUrl">confirmation callback url (webhook in client system)</label>
+            <input name="confirmationCallbackUrl" id="confirmationCallbackUrl" type="text">
           </div>
           <div class="field">
-            <label for="errorcallbackurl">error callback url (webhook in client system)</label>
-            <input name="errorcallbackurl" id="errorcallbackurl" type="text">
+            <label for="errorCallbackUrl">error callback url (webhook in client system)</label>
+            <input name="errorCallbackUrl" id="errorCallbackUrl" type="text">
           </div>
           <ul class="actions">
             <li><input type="submit" name="submit" id="submit" value="Add Expected Payment" /></li>
@@ -114,12 +114,12 @@ router.post('/', (req, res) => {
   let ticker = req.body.ticker;
   let amount = req.body.amount;
   let originwalletuniqueidentifier = req.body.originwalletuniqueidentifier;
-  let clientforeignkey = req.body.clientforeignkey;
-  let initialcallbackurl = req.body.initialcallbackurl;
-  let confirmationcallbackurl = req.body.confirmationcallbackurl;
-  let errorcallbackurl = req.body.errorcallbackurl;
+  let clientForeignKey = req.body.clientForeignKey;
+  let initialCallbackUrl = req.body.initialCallbackUrl;
+  let confirmationCallbackUrl = req.body.confirmationCallbackUrl;
+  let errorCallbackUrl = req.body.errorCallbackUrl;
 
-  if (!ticker || !amount || !originwalletuniqueidentifier || !clientforeignkey || !initialcallbackurl || !confirmationcallbackurl || !errorcallbackurl) {
+  if (!ticker || !amount || !originwalletuniqueidentifier || !clientForeignKey || !initialCallbackUrl || !confirmationCallbackUrl || !errorCallbackUrl) {
     return res.status(400).json({
       success : false,
       message : "missing required fields"

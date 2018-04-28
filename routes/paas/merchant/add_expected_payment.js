@@ -9,12 +9,12 @@ router.post('/', (req, res) => {
   let ticker = req.body.ticker;
   let amount = req.body.amount;
   let originwalletuniqueidentifier = req.body.originwalletuniqueidentifier;
-  let clientforeignkey = req.body.clientforeignkey;
-  let initialcallbackurl = req.body.initialcallbackurl;
-  let confirmationcallbackurl = req.body.confirmationcallbackurl;
-  let errorcallbackurl = req.body.errorcallbackurl;
+  let clientForeignKey = req.body.clientForeignKey;
+  let initialCallbackUrl = req.body.initialCallbackUrl;
+  let confirmationCallbackUrl = req.body.confirmationCallbackUrl;
+  let errorCallbackUrl = req.body.errorCallbackUrl;
 
-  if (!ticker || !amount || !originwalletuniqueidentifier || !clientforeignkey || !initialcallbackurl || !confirmationcallbackurl || !errorcallbackurl) {
+  if (!ticker || !amount || !originwalletuniqueidentifier || !clientForeignKey || !initialCallbackUrl || !confirmationCallbackUrl || !errorCallbackUrl) {
     return res.status(400).json({
       success : false,
       message : "missing required fields"
