@@ -65,8 +65,9 @@
           </p>
           <p>
             For example: <i>https://your.api.here/payments/{invoicenumber}/error</i>
-          </p>
-          <code>
+          </p>          
+				  <pre class="align-left">
+            <code>
 POST -> 
 {
   "success": false,
@@ -76,7 +77,8 @@ POST ->
   "remainingAmount": number - the amount remaining to be paid,
   "transactionId": BiT reference to this payment
 }
-          </code>
+            </code>
+          </pre>
           <h3>How to use transactionId</h3>
           <p>
             You receive a "transactionId" in the response to setting up a new incoming payment, and also as part of the error payload. You can use
