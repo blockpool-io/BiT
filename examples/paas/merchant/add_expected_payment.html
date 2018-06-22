@@ -18,14 +18,70 @@
           <h1>Add Expected Payment</h1>
           <p>BiT Paas :: merchant</p>
           <ul class="actions horizontal">
-              <li><a href="#demo" class="button big wide smooth-scroll-middle">Working Demo</a></li>
-              <li><a href="#code" class="button big wide smooth-scroll-middle">Sample Code</a></li>
+            <li><a href="#overview" class="button big wide smooth-scroll-middle">Overview</a></li>
+            <li><a href="#demo" class="button big wide smooth-scroll-middle">Working Demo</a></li>
+            <li><a href="#code" class="button big wide smooth-scroll-middle">Sample Code</a></li>
             <li><a href="#contract" class="button big wide smooth-scroll-middle">Contract</a></li>
           </ul>
           <a href="../index.html#merchant" >Go Back</a>
         </div>
         <div class="image">
           <img src="../../../images/banner.jpg" alt="" />
+        </div>
+      </section>
+      <!-- Overview -->
+      <section id="overview" class="wrapper style1 align-center">
+        <div class="inner medium">
+          <h2>Brief Overview - Add Expected Payment</h2>
+          <p>
+            This endpoint supports a classic e-commerce solution, or any other requirement where you ask someone to pay you and need to know when that
+            payment has been completed. You provide a wallet into which you want the payment to be made, the amount of the payment, and three callbacks.
+            Finally you can optionally provide a unique key (clientForeignKey) for the payment; this is recommended as it will help with any issues that may occur. 
+            We do recommend that the reference you provide is unique per expected payment, so maybe it is your invoice number.
+          </p>
+          <p>
+            The three callbacks correspond to the three outcomes of a payment, briefly described below:
+          </p>
+          <h3>initialCallbackUrl</h3>
+          <p>
+            Is called when the payment is attempted, but has zero confirmations. The Url you provide here will be called with a GET. You must ensure you can identify
+            the payment reference in your system within the Url you provide.
+          </p>
+          <p>
+            For example: <i>https://your.api.here/payments/{invoicenumber}/initiated</i>
+          </p>
+          <h3>confirmationCallbackUrl</h3>
+          <p>
+            Is called when the payment has reached the required confirmations on the network. The Url you provide here will be called with a GET. You must ensure you 
+            can identify the payment reference in your system within the Url you provide.
+          </p>
+          <p>
+            For example: <i>https://your.api.here/payments/{invoicenumber}/confirmed</i>
+          </p>
+          <h3>errorCallbackUrl</h3>
+          <p>
+            Is called when the payment is attempted but with insufficient funds. The Url you provide here will be called with a POST and will contain a payload defined
+            below.
+          </p>
+          <p>
+            For example: <i>https://your.api.here/payments/{invoicenumber}/error</i>
+          </p>
+          <code>
+POST -> 
+{
+  "success": false,
+  "errorType": 'underpayment',
+  "message": 'We have received {amount receive} on a balance of {amount remaining}. Please send {difference} to {address}.',
+  "expectedAmount": number - amount you originally requested,
+  "remainingAmount": number - the amount remaining to be paid,
+  "transactionId": BiT reference to this payment
+}
+          </code>
+          <h3>How to use transactionId</h3>
+          <p>
+            You receive a "transactionId" in the response to setting up a new incoming payment, and also as part of the error payload. You can use
+            this reference to call the <a href="get_qr_code.html">get QR Code</a> end point. This will always correspond to the current amount owed for the payment.
+          </p>
         </div>
       </section>
     <!-- Demo -->
@@ -36,9 +92,7 @@
           <div class="field half first">
             <label for="ticker">Currency</label>
             <select name="ticker" id="ticker">
-              <option value="BPL">Blockpool</option>
               <option value="BTC">Bitcoin</option>
-              <option value="WBX">WOOOBux</option>
               <option value="ADC">Audiocoin</option>
             </select>
           </div>
@@ -198,7 +252,8 @@ PUT -> https://test.bit.blockpool.io/merchant/{ticker}/makepayment
   "success": true,
   "png": 'png base64 image of payment qr code',
   "address": 'unique address for your customer to make payment to',
-  "queryString": 'unique payment url to give to your customer for making payment to'
+  "queryString": 'unique payment url to give to your customer for making payment to',
+  "transactionId": BiT reference to this payment
 }
 					</code>
 				</pre>
