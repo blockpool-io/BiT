@@ -240,10 +240,10 @@ PUT -> https://test.bit.blockpool.io/merchant/{ticker}/makepayment
 {
   originwalletuniqueidentifier : unique identifier of origin wallet,
   amount : the amount to expect (float - 8dp),
-  initialcallbackurl : webhook into client system for notification of unconfirmed payment (string),
-  confirmationcallbackurl : webook into client system for notification of confirmed payment (string),
-  errorcallbackurl : webhook into client system for error callback (underpayment) (string),
-  clientforeignkey : unique reference into Client system for this specific incoming payment (string)
+  initialCallbackUrl : webhook into client system for notification of unconfirmed payment (string),
+  confirmationCallbackUrl : webook into client system for notification of confirmed payment (string),
+  errorCallbackUrl : webhook into client system for error callback (underpayment) (string),
+  clientForeignKey : unique reference into Client system for this specific incoming payment (string)
 }
 					</code>
 				</pre>
