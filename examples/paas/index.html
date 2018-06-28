@@ -17,6 +17,7 @@
         <div class="content">
           <h1>PaaS documentation and working examples</h1>
           <ul class="actions horizontal">
+            <li><a href="#overview" class="button big wide smooth-scroll-middle">Overview</a></li>
             <li><a href="#wallets" class="button big wide smooth-scroll-middle">Wallets</a></li>
             <li><a href="#transactions" class="button big wide smooth-scroll-middle">Transactions</a></li>
             <li><a href="#merchant" class="button big wide smooth-scroll-middle">Merchant</a></li>
@@ -28,6 +29,59 @@
         </div>
       </section>
     </div>
+    <!-- Overview -->
+    <section id="overview" class="wrapper style1 align-center">
+      <div class="inner medium">
+        <h2>Brief Overview - Security Model</h2>
+        <p>
+          Every request made to this API is secured by a public and a private key. Every request must contain credentials that identify you on BiT. You can 
+          generate a public and private key via myBlockpool (both on test and live) and if you want to do this please do get in touch.
+        </p>
+        <img src="../../assets/images/application-security.png" style="width: 100%" alt="Display on myBlockpool showing public and private keys" title="Display on myBlockpool showing public and private keys" />
+        <p>
+          The two headers that are required are 'apipublickey' and 'apihashedkey'.
+        </p>
+        <pre class="align-left">
+          <code>
+headers : {
+  apipublickey : string,
+  apihashedkey : string
+}
+          </code>
+        </pre>
+        <h4>apipublickey</h4>
+        <p>
+          This is plain text and should contain the string displayed in the screen shot above against Api Public Key.
+        </p>
+        <h4>apihashedkey</h4>
+        <p>
+          The process for generating the apihashedkey is slightly more involved. The phrase (hidden behind ***s in the screen shot above)
+           must be hashed using bcrypt (see the code snippet below) however this must be done for every request. If the same hash is received twice the
+           request will be rejected.
+        </p>
+        <pre class="align-left">
+          <code>
+function hashTheCode(privatekey) {
+  return new Promise((resolve, reject) => {
+    bcrypt.genSalt(10, (err, salt) => {
+      bcrypt.hash(privatekey, salt, (err, apihashedkey) => {
+        if (err) {
+          return reject(err);
+        } else {
+          return resolve(apihashedkey);
+        }
+      });
+    });
+  });
+};
+          </code>
+        </pre>
+        <p>
+          You absolutely must keep your private key phrase secret and NEVER make it available online in any circumstances or a third party will
+          become able to impersonate you.
+        </p>
+      </div>
+    </section>
     <section class="wrapper style1 align-center" id="wallets">
       <div class="inner">
         <h2>Wallets</h2>
