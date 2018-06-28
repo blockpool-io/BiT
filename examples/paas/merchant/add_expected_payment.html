@@ -103,8 +103,8 @@ POST ->
             <input name="amount" id="amount" type="text">
           </div>
           <div class="field">
-            <label for="originwalletuniqueidentifier">origin wallet unique identifier</label>
-            <input name="originwalletuniqueidentifier" id="originwalletuniqueidentifier" type="text"> <!-- 5a8edeaff9c6a127b0ba5b23 (BPL) 5a8f013a21e6124d00795f9f (WBX) -->
+            <label for="targetwalletuniqueidentifier">target wallet unique identifier</label>
+            <input name="targetwalletuniqueidentifier" id="targetwalletuniqueidentifier" type="text"> <!-- 5a8edeaff9c6a127b0ba5b23 (BPL) 5a8f013a21e6124d00795f9f (WBX) -->
           </div>
           <div class="field">
             <label for="clientForeignKey">unique foreign key</label>
@@ -169,13 +169,13 @@ function hashTheCode(privatekey) {
 router.post('/', (req, res) => {
   let ticker = req.body.ticker;
   let amount = req.body.amount;
-  let originwalletuniqueidentifier = req.body.originwalletuniqueidentifier;
+  let targetwalletuniqueidentifier = req.body.targetwalletuniqueidentifier;
   let clientForeignKey = req.body.clientForeignKey;
   let initialCallbackUrl = req.body.initialCallbackUrl;
   let confirmationCallbackUrl = req.body.confirmationCallbackUrl;
   let errorCallbackUrl = req.body.errorCallbackUrl;
 
-  if (!ticker || !amount || !originwalletuniqueidentifier || !clientForeignKey || !initialCallbackUrl || !confirmationCallbackUrl || !errorCallbackUrl) {
+  if (!ticker || !amount || !targetwalletuniqueidentifier || !clientForeignKey || !initialCallbackUrl || !confirmationCallbackUrl || !errorCallbackUrl) {
     return res.status(400).json({
       success : false,
       message : "missing required fields"
@@ -238,7 +238,7 @@ module.exports = router;
 					<code>
 PUT -> https://test.bit.blockpool.io/merchant/{ticker}/makepayment
 {
-  originwalletuniqueidentifier : unique identifier of origin wallet,
+  targetwalletuniqueidentifier : unique identifier of the target wallet,
   amount : the amount to expect (float - 8dp),
   initialCallbackUrl : webhook into client system for notification of unconfirmed payment (string),
   confirmationCallbackUrl : webook into client system for notification of confirmed payment (string),

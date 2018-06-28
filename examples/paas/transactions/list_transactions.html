@@ -1,0 +1,250 @@
+<!DOCTYPE HTML>
+<!--
+	Story by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+	<head>
+		<title>Blockpool API Documentation - List Transactions</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<link rel="stylesheet" href="../../../assets/css/main.css" />
+	</head>
+	<body>
+    <div id="wrapper" class="divided">    
+      <section class="banner style1 orient-left content-align-left image-position-right fullscreen onload-image-fade-in onload-content-fade-right">
+        <div class="content">
+          <h1>List Transactions</h1>
+          <p>BiT PaaS :: transactions</p>
+          <ul class="actions horizontal">
+            <li><a href="#overview" class="button big wide smooth-scroll-middle">Overview</a></li>
+              <li><a href="#demo" class="button big wide smooth-scroll-middle">Working Demo</a></li>
+              <li><a href="#code" class="button big wide smooth-scroll-middle">Sample Code</a></li>
+            <li><a href="#contract" class="button big wide smooth-scroll-middle">Contract</a></li>
+          </ul>
+          <a href="../index.html#transactions" >Go Back</a>
+        </div>
+        <div class="image">
+          <img src="../../../images/banner.jpg" alt="" />
+        </div>
+      </section>
+      <!-- Overview -->
+      <section id="overview" class="wrapper style1 align-center">
+      <div class="inner medium">
+        <h2>Brief Overview - List Transactions</h2>
+        <p>
+          The List Transactions endpoint is a simple GET that passes the filter parameter as a base64 encoded string. This allows us to stay
+          true to ReST principles, while not creating a massively complicated Url using query parameters.
+        </p>
+        <p>
+          There is an example in the <a href="#code">Sample Code</a> section below. The "limit" option is Optional
+          and will default to 50 if not set in your request.
+        </p>
+      </div>
+    </section>
+    <!-- Demo -->
+    <section id="demo" class="wrapper style1 align-center">
+      <div class="inner medium">
+        <h2>Working Example - List Transactions</h2>
+        <form method="post" action="/paas/transactions/list_transactions">
+          <div class="field">
+            <label for="ticker">Currency</label>
+              <select name="ticker" id="ticker">
+                <option value="BPL">Blockpool</option>
+                <option disabled value="BTC">Bitcoin</option>
+                <option value="WBX">WOOOBux</option>
+                <option disabled value="ADC">Audiocoin</option>
+              </select>
+          </div>
+          <h4>Either :: query by address</h4>
+          <div class="field">
+            <label for="address">address</label>
+            <input name="address" id="address" type="text">
+          </div>
+          <h4>Or :: query by wallet unique identifier</h4>
+          <div class="field">
+            <label for="walletuniqueidentifier">wallet unique identifier</label>
+            <input name="walletuniqueidentifier" id="walletuniqueidentifier" type="text">
+          </div>
+          <h4>Optional query params</h4>
+          <div class="field">
+            <label for="limit">limit (number of records to display; defaults to 50)</label>
+            <input name="limit" id="limit" type="text">
+          </div>
+          <ul class="actions">
+            <li><input type="submit" name="submit" id="submit" value="List Transactions" /></li>
+          </ul>
+        </form>
+      </div>
+    </section>
+
+
+	<!-- Code -->
+		
+		<section id="code" class="wrapper style1 align-center">
+			<div class="inner medium">
+
+				<h2 id="content">Sample Code</h2>
+				<p>
+					Simply decorate your request with the correct headers (apipublickey and apihashedkey) and pass over the ticker and transaction id.
+				</p>
+				<p>
+					The code below accepts a POST request via an express endpoint. The apipublickey and apiprivatekey are stored in config. 
+				</p>
+				<pre class="align-left">
+					<code>
+'use strict';
+const express = require('express');
+const router = express.Router();
+const request = require('request');
+const config = require('../config/config');
+const bcrypt = require('bcrypt');
+
+function hashTheCode(privatekey) {
+  return new Promise((resolve, reject) => {
+    bcrypt.genSalt(10, (err, salt) => {
+      bcrypt.hash(privatekey, salt, (err, apihashedkey) => {
+          if (err) {
+              return reject(err);
+          } else {
+              return resolve(apihashedkey);
+          }
+      });
+    });
+  });
+};
+
+router.post('/', (req, res) => {
+  let ticker = req.body.ticker;
+  let address = req.body.address;
+  let walletuniqueidentifier = req.body.walletuniqueidentifier;
+  let limit = req.body.limit;
+
+  if (!ticker || (!address && !walletuniqueidentifier)) {
+    return res.status(400).json({
+      success : false,
+      message : "missing required fields"
+    });
+  }
+
+  let filter = { };
+  if (address) {
+    filter.address = address;
+  }
+  if (walletuniqueidentifier) {
+    filter.walletuniqueidentifier = walletuniqueidentifier;
+  }
+  if (limit) {
+    filter.limit = limit;
+  }
+
+  let encodedFilter = new Buffer(filter).toString('base64')
+
+  hashTheCode(config.apiprivatekey)
+  .then((apihashedkey) => {
+    let params = {
+      url : config.urlToBit + '/transactions/' + ticker + '/list/' + encodedFilter,
+      headers : {
+        apipublickey : config.apipublickey,
+        apihashedkey : apihashedkey
+      },
+      json : true
+    };
+
+    request.get(params, (error, response, body) => {
+      if (error) {
+        let statusCode = 500;
+        if (response) {
+          statusCode = response.statusCode;
+        }
+        return res.status(statusCode).json({
+          success : false,
+          message: error.message
+        });
+      } else {
+        return res.status(response.statusCode).json(body);
+      }
+    });
+  })
+  .catch((err) => {
+    return res.status(401).json({
+      success : false,
+      message: err.message
+    });
+  });
+});
+
+module.exports = router;
+					</code>
+				</pre>
+				
+			</div>
+		</section>
+	<!-- Contract -->
+			
+		<section id="contract" class="wrapper style1 align-center">
+			<div class="inner medium">
+
+				<h2 id="content">Contract</h2>
+        <p>
+          All payloads are in JSON format.
+        </p>
+				
+				<h3>Request</h3>
+				<pre class="align-left">
+					<code>
+GET -> https://test.bit.blockpool.io/transactions/{ticker}/{transactionid}
+					</code>
+				</pre>
+				<h3>Response</h3>
+				<pre class="align-left">
+					<code>
+{
+  success: true,
+  wallets: [
+    {
+      currency: 'the ticker for the currency as a three letter code, lower case',
+      id: 'the wallet unique identifier'
+      siloLabel: 'the random string label for this account',
+      dateCreated: 'when the silo was created',
+      buckets: [] <- 'an empty array currently',
+      addresses: [] <- 'an array of addresses for the silo to be used for receiving addresses',
+      balance: {
+        confirmed: a float representing the available to spend balance of the silo,
+        unconfirmed: a float representing the unavailable to spend balance of the silo,
+        cachedDate: the date at which these numbers are valid,
+        hasErrors: true if an error occurred generating the balance,
+        errorMessage: contains an error message if there was an error,
+        transactionFee: a float representing the service fee for sending funds for this currency
+      }
+    }
+  ]
+}
+					</code>
+				</pre>
+			</div>
+		</section>
+
+		<section class="wrapper style1 align-center">
+				<div class="inner medium">
+					<a href="../index.html#transactions" >Go Back</a>
+				</div>
+		</section>
+		<footer class="wrapper style1 align-center">
+        <div class="inner">
+          <p>&copy; Blockpool. Design: <a href="https://html5up.net">HTML5 UP</a>.</p>
+        </div>
+      </footer>
+    </div>
+  
+      <!-- Scripts -->
+      <script src="../../../assets/js/jquery.min.js"></script>
+			<script src="../../../assets/js/jquery.scrollex.min.js"></script>
+			<script src="../../../assets/js/jquery.scrolly.min.js"></script>
+      <script src="../../../assets/js/skel.min.js"></script>
+      <script src="../../../assets/js/util.js"></script>
+      <script src="../../../assets/js/main.js"></script>
+
+	</body>
+</html>
