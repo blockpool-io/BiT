@@ -15,22 +15,48 @@ router.post('/', (req, res) => {
         });
     }
 
+    let body = { };
+    if (req.body.quantity) {
+      body.quantity = req.body.quantity;
+    } else {
+      body.clientforeignkeys = [];
+      if (req.body.clientforeignkey1) {
+        body.clientforeignkeys.push(req.body.clientforeignkey1);
+      }
+      if (req.body.clientforeignkey2) {
+        body.clientforeignkeys.push(req.body.clientforeignkey2);
+      }
+      if (req.body.clientforeignkey3) {
+        body.clientforeignkeys.push(req.body.clientforeignkey3);
+      }
+      if (req.body.clientforeignkey4) {
+        body.clientforeignkeys.push(req.body.clientforeignkey4);
+      }
+      if (req.body.clientforeignkey5) {
+        body.clientforeignkeys.push(req.body.clientforeignkey5);
+      }
+      if (req.body.clientforeignkey6) {
+        body.clientforeignkeys.push(req.body.clientforeignkey6);
+      }
+      if (body.clientforeignkeys.length === 0) {
+        return res.status(400).json({
+          success : false,
+          message : "missing required fields"
+        });
+      }
+    } 
+
     handleBiTHeaders.hashKey(config.apiprivatekey)
     .then((apihashedkey) => {
         let params = {
-            url : config.urlToBit + '/wallets/' + ticker.toLowerCase(),
+            url : config.urlToBit + '/wallets/' + ticker.toLowerCase() + '/bulk',
             headers : {
                 apipublickey : config.apipublickey,
                 apihashedkey : apihashedkey
             },
-            json : true
+            json : true,
+            body : body
         };
-        let clientforeignkey = req.body.clientforeignkey;
-        if (clientforeignkey) {
-          params.body = {
-            clientforeignkey : clientforeignkey
-          };
-        }
     
         request.post(params, (error, response, body) => {
             if (error) {

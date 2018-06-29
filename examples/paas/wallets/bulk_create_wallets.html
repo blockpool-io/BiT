@@ -6,7 +6,7 @@
 -->
 <html>
 	<head>
-		<title>Blockpool API Documentation - Create a Wallet on PaaS</title>
+		<title>Blockpool API Documentation - Bulk Create Wallets</title>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<link rel="stylesheet" href="../../../assets/css/main.css" />
@@ -15,11 +15,12 @@
     <div id="wrapper" class="divided">    
       <section class="banner style1 orient-left content-align-left image-position-right fullscreen onload-image-fade-in onload-content-fade-right">
         <div class="content">
-          <h1>Create a Wallet on an Associated Account</h1>
+          <h1>Bulk Create Wallets on an Associated Account</h1>
           <p>BiT PaaS :: wallets</p>
           <ul class="actions horizontal">
-              <li><a href="#demo" class="button big wide smooth-scroll-middle">Working Demo</a></li>
-              <li><a href="#code" class="button big wide smooth-scroll-middle">Sample Code</a></li>
+            <li><a href="#overview" class="button big wide smooth-scroll-middle">Overview</a></li>
+            <li><a href="#demo" class="button big wide smooth-scroll-middle">Working Demo</a></li>
+            <li><a href="#code" class="button big wide smooth-scroll-middle">Sample Code</a></li>
             <li><a href="#contract" class="button big wide smooth-scroll-middle">Contract</a></li>
           </ul>
           <a href="../index.html#wallets" >Go Back</a>
@@ -27,19 +28,20 @@
         <div class="image">
           <img src="../../../images/banner.jpg" alt="" />
         </div>
-      </section>
+      </section><!-- Overview -->
     </div>
     <section id="overview" class="wrapper style1 align-center">
       <div class="inner medium">
-        <h2>Brief Overview - Create Wallet</h2>
+        <h2>Brief Overview - Bulk Create Wallets</h2>
         <p>
-          You can choose to create a wallet with a clientforeignkey that you provide, or leaving that option empty. If you provide the clientforeignkey
-          then it can be used elsewhere in the system to allow you to access the wallet you created, without needing the walletuniqueidentifier or
-          address.
+          You can bulk create wallets using two methods. You can either provide a number to create, or provide an array of UIDs and one wallet will be created
+          for each UID you provide. We will de-dupe this list on receipt. If you have provided the UID list we will returning the relevant UID mapping in the
+          result as "clientforeignkey". We will use the UID, combined with another secret value, to generate the address which will allow you to
+          integrate directly with BiT on other endpoints using only your internal UID.
         </p>
         <p>
           <b>
-            This clientforeignkey is only relevant for BPL Descendant chains, so Blockpool or WOOOBux in this sample application. IT WILL BE IGNORED
+            The clientforeignkey is only relevant for BPL Descendant chains, so Blockpool or WOOOBux in this sample application. IT WILL BE IGNORED
             SILENTLY SHOULD YOU USE IT WITH BITCOIN OR AUDIOCOIN.
           </b>
         </p>
@@ -53,26 +55,49 @@
     <!-- Demo -->
     <section id="demo" class="wrapper style1 align-center">
       <div class="inner medium">
-        <h2>Working Example - Create a Wallet</h2>
-        <form method="post" action="/paas/wallets/create_wallet">
+        <h2>Working Example - Bulk Create Wallets</h2>
+        <form method="post" action="/paas/wallets/bulk_create_wallets">
           <div class="field">
             <label for="ticker">Currency</label>
               <select name="ticker" id="ticker">
                 <option value="BPL">Blockpool</option>
-                <option value="BTC">Bitcoin</option>
                 <option value="WBX">WOOOBux</option>
-                <option value="ADC">Audiocoin</option>
               </select>
           </div>
+          <h4>Either :: provide a quantity to be generated</h4>
           <div class="field">
-            <label for="clientforeignkey">client foreign key (optional)</label>
-            <input name="clientforeignkey" id="clientforeignkey" type="text">
+            <label for="quantity">quantity</label>
+            <input name="quantity" id="quantity" type="text"> <!-- 5a8f025821e6124d00795fa6 (WBX) -->
+          </div>
+          <h4>Or :: specify multiple clientforeignkey values (real implementation unlimited length array)</h4>
+          <div class="field half">
+            <label for="clientforeignkey1">client foreign key</label>
+            <input name="clientforeignkey1" id="clientforeignkey1" type="text"> <!-- WhAX1rRKmhD9R5vT1B4XvvcRSyXMevxnhv (WBX) -->
+          </div>
+          <div class="field half">
+            <label for="clientforeignkey2">client foreign key</label>
+            <input name="clientforeignkey2" id="clientforeignkey2" type="text"> <!-- WhAX1rRKmhD9R5vT1B4XvvcRSyXMevxnhv (WBX) -->
+          </div>
+          <div class="field half">
+            <label for="clientforeignkey3">client foreign key</label>
+            <input name="clientforeignkey3" id="clientforeignkey3" type="text"> <!-- WhAX1rRKmhD9R5vT1B4XvvcRSyXMevxnhv (WBX) -->
+          </div>
+          <div class="field half">
+            <label for="clientforeignkey4">client foreign key</label>
+            <input name="clientforeignkey4" id="clientforeignkey4" type="text"> <!-- WhAX1rRKmhD9R5vT1B4XvvcRSyXMevxnhv (WBX) -->
+          </div>
+          <div class="field half">
+            <label for="clientforeignkey5">client foreign key</label>
+            <input name="clientforeignkey5" id="clientforeignkey5" type="text"> <!-- WhAX1rRKmhD9R5vT1B4XvvcRSyXMevxnhv (WBX) -->
+          </div>
+          <div class="field half">
+            <label for="clientforeignkey6">client foreign key</label>
+            <input name="clientforeignkey6" id="clientforeignkey6" type="text"> <!-- WhAX1rRKmhD9R5vT1B4XvvcRSyXMevxnhv (WBX) -->
           </div>
           <ul class="actions">
-            <li><input type="submit" name="submit" id="submit" value="Create Wallet" /></li>
+            <li><input type="submit" name="submit" id="submit" value="Bulk Create Wallets" /></li>
           </ul>
         </form>
-
       </div>
     </section>
 
@@ -120,7 +145,36 @@ router.post('/', (req, res) => {
       message : "missing required fields"
     });
   }
-
+  let body = { };
+  if (req.body.quantity) {
+    body.quantity = req.body.quantity;
+  } else {
+    body.clientforeignkeys = [];
+    if (req.body.clientforeignkey1) {
+      body.clientforeignkeys.push(req.body.clientforeignkey1);
+    }
+    if (req.body.clientforeignkey2) {
+      body.clientforeignkeys.push(req.body.clientforeignkey2);
+    }
+    if (req.body.clientforeignkey3) {
+      body.clientforeignkeys.push(req.body.clientforeignkey3);
+    }
+    if (req.body.clientforeignkey4) {
+      body.clientforeignkeys.push(req.body.clientforeignkey4);
+    }
+    if (req.body.clientforeignkey5) {
+      body.clientforeignkeys.push(req.body.clientforeignkey5);
+    }
+    if (req.body.clientforeignkey6) {
+      body.clientforeignkeys.push(req.body.clientforeignkey6);
+    }
+    if (body.clientforeignkeys.length === 0) {
+      return res.status(400).json({
+        success : false,
+        message : "missing required fields"
+      });
+    }
+  } 
   hashTheCode(config.apiprivatekey)
   .then((apihashedkey) => {
     let params = {
@@ -129,14 +183,9 @@ router.post('/', (req, res) => {
         apipublickey : config.apipublickey,
         apihashedkey : apihashedkey
       },
-      json : true
+      json : true,
+      body : body
     };
-    let clientforeignkey = req.body.clientforeignkey;
-    if (clientforeignkey) {
-      params.body = {
-        clientforeignkey : clientforeignkey
-      };
-    }
 
     request.post(params, (error, response, body) => {
       if (error) {
@@ -180,12 +229,11 @@ module.exports = router;
 				<h3>Request</h3>
 				<pre class="align-left">
 					<code>
-POST -> https://test.bit.blockpool.io/wallets/{ticker}
-
-OPTIONAL PAYLOAD:
+POST -> https://test.bit.blockpool.io/wallets/{ticker}/bulk
 
 {
-  clientforeignkey: your internal reference for this wallet (MUST BE 100% UNIQUE)
+  quantity: number of wallets to create, not required if array of clientforeignkeys is provided,
+  clientforeignkeys: [ array of unique identifiers from your system ]
 }
 					</code>
 				</pre>
@@ -194,9 +242,13 @@ OPTIONAL PAYLOAD:
 					<code>
 {
   success: true,
-  walletuniqueidentifier: 'the identifier for the created wallet',
-  initialaddress: 'the address created for this wallet',
-  clientforeignkey: if provided, the client foreign key you used to create the wallet
+  wallets: [
+    {
+      walletuniqueidentifier: 'the identifier for the created wallet',
+      initialaddress: 'the address created for this wallet',
+      clientforeignkey: if provided, the client foreign key you used to create the wallet
+    }
+  ]
 }
 					</code>
 				</pre>
