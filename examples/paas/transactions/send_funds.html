@@ -51,12 +51,8 @@
             <input name="originwalletuniqueidentifier" id="originwalletuniqueidentifier" type="text"> <!-- 5a8edeaff9c6a127b0ba5b23 (BPL) 5a8f013a21e6124d00795f9f (WBX) -->
           </div>
           <div class="field">
-            <label for="comment">Comment (optional - internal only)</label>
+            <label for="comment">Comment (optional)</label>
             <textarea name="comment" id="comment" rows="4"></textarea>
-          </div>
-          <div class="field">
-            <label for="textpayload">Text Payload (additional charge - max length 70 chars)</label>
-            <input name="textpayload" id="textpayload" maxlength="70" type="text">
           </div>
           <h4>Either :: send to another trusted account</h4>
           <div class="field">
@@ -68,11 +64,15 @@
             <label for="destinationaddress">destination address</label>
             <input name="destinationaddress" id="destinationaddress" type="text"> <!-- WhAX1rRKmhD9R5vT1B4XvvcRSyXMevxnhv (WBX) -->
           </div>
+          <h4>Or :: send to an address controlled by your account and generated via this clientforeignkey (only for BPL Descendant Chains)</h4>
+          <div class="field">
+            <label for="destinationclientforeignkey">client foreign key</label>
+            <input name="destinationclientforeignkey" id="destinationclientforeignkey" type="text"> <!-- WhAX1rRKmhD9R5vT1B4XvvcRSyXMevxnhv (WBX) -->
+          </div>
           <ul class="actions">
             <li><input type="submit" name="submit" id="submit" value="Send funds" /></li>
           </ul>
         </form>
-
       </div>
     </section>
 
@@ -117,9 +117,10 @@ router.post('/', (req, res) => {
   let amount = req.body.amount;
   let originwalletuniqueidentifier = req.body.originwalletuniqueidentifier;
   let destinationwalletuniqueidentifier = req.body.destinationwalletuniqueidentifier;
+  let destinationclientforeignkey = req.body.destinationclientforeignkey;
   let destinationaddress = req.body.destinationaddress;
 
-  if (!ticker || !amount || !originwalletuniqueidentifier || (!destinationwalletuniqueidentifier && !destinationaddress)) {
+  if (!ticker || !amount || !originwalletuniqueidentifier || (!destinationwalletuniqueidentifier && !destinationaddress && !destinationclientforeignkey)) {
     return res.status(400).json({
       success : false,
       message : "missing required fields"
@@ -143,6 +144,7 @@ router.post('/', (req, res) => {
         originwalletuniqueidentifier : originwalletuniqueidentifier,
         destinationwalletuniqueidentifier : destinationwalletuniqueidentifier,
         destinationaddress : destinationaddress,
+        destinationclientforeignkey : destinationclientforeignkey,
         textpayload : textpayload
       }
     };
@@ -192,8 +194,9 @@ module.exports = router;
 POST -> https://test.bit.blockpool.io/transactions/{ticker}
 {
   originwalletuniqueidentifier : unique identifier of origin wallet,
-  destinationwalletuniqueidentifier : unique identifier of destination wallet (optional if destinationaddress provided),
-  destinationaddress : address to send funds to (optional if destinationwalletuniqueidentifier provided),
+  destinationwalletuniqueidentifier : unique identifier of destination wallet (optional if destinationaddress or destinationclientforeignkey provided),
+  destinationaddress : address to send funds to (optional if destinationwalletuniqueidentifier or destinationclientforeignkey provided),
+  destinationclientforeignkey : clientforeignkey used to create the destination address (optional if destinationwalletuniqueidentifier or destinationaddress provided),
   amount : amount to send,
   comment : optional comment
 }
