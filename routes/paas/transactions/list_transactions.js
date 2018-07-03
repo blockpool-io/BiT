@@ -9,8 +9,9 @@ router.post('/', (req, res) => {
   let ticker = req.body.ticker;
   let address = req.body.address;
   let walletuniqueidentifier = req.body.walletuniqueidentifier;
+  let clientforeignkey = req.body.clientforeignkey;
   let limit = req.body.limit;
-  if (!ticker || (!address && !walletuniqueidentifier)) {
+  if (!ticker || (!address && !walletuniqueidentifier && !clientforeignkey)) {
     return res.status(400).json({
       success : false,
       message : "missing required fields"
@@ -23,6 +24,9 @@ router.post('/', (req, res) => {
   }
   if (walletuniqueidentifier) {
     filter.walletuniqueidentifier = walletuniqueidentifier;
+  }
+  if (clientforeignkey) {
+    filter.clientforeignkey = clientforeignkey;
   }
   if (limit) {
     filter.limit = limit;
