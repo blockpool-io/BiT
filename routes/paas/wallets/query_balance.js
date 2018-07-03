@@ -9,6 +9,18 @@ const handleBiTHeaders = require('../../../headerhandler');
 router.post('/', (req, res) => {
   let ticker = req.body.ticker;
   let walletuniqueidentifier = req.body.walletuniqueidentifier;
+  let clientforeignkey = req.body.clientforeignkey;
+
+  if (!walletuniqueidentifier && !clientforeignkey) {
+    return res.status(400).json({
+      success : false,
+      message : "missing required fields"
+    });
+  }
+
+  if (!walletuniqueidentifier && clientforeignkey) {
+    walletuniqueidentifier = clientforeignkey;
+  }
 
   handleBiTHeaders.hashKey(config.apiprivatekey)
   .then((apihashedkey) => {

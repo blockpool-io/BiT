@@ -33,7 +33,7 @@
       <div class="inner medium">
         <h2>Working Example - Query Balance</h2>
         <form method="post" action="/paas/wallets/query_balance">
-          <div class="field half">
+          <div class="field">
             <label for="ticker">Currency</label>
               <select name="ticker" id="ticker">
                 <option value="BPL">Blockpool</option>
@@ -42,9 +42,14 @@
                 <option value="ADC">Audiocoin</option>
               </select>
           </div>
-          <div class="field half">
+          <div class="field">
             <label for="walletuniqueidentifier">wallet unique identifier</label>
             <input name="walletuniqueidentifier" id="walletuniqueidentifier" type="text"> <!-- 5a8edeaff9c6a127b0ba5b23 -->
+          </div>
+          <h4>Or :: send to an address controlled by your account and generated via this clientforeignkey (only for BPL Descendant Chains)</h4>
+          <div class="field">
+            <label for="clientforeignkey">client foreign key</label>
+            <input name="clientforeignkey" id="clientforeignkey" type="text"> <!-- WhAX1rRKmhD9R5vT1B4XvvcRSyXMevxnhv (WBX) -->
           </div>
           <ul class="actions">
             <li><input type="submit" name="submit" id="submit" value="Query Balance" /></li>
@@ -93,6 +98,18 @@ function hashTheCode(privatekey) {
 router.post('/', (req, res) => {
   let ticker = req.body.ticker;
   let walletuniqueidentifier = req.body.walletuniqueidentifier;
+  let clientforeignkey = req.body.clientforeignkey;
+
+  if (!walletuniqueidentifier && !clientforeignkey) {
+    return res.status(400).json({
+      success : false,
+      message : "missing required fields"
+    });
+  }
+
+  if (!walletuniqueidentifier && clientforeignkey) {
+    walletuniqueidentifier = clientforeignkey;
+  }
 
   hashTheCode(config.apiprivatekey)
   .then((apihashedkey) => {
@@ -148,6 +165,8 @@ module.exports = router;
 				<pre class="align-left">
 					<code>
 GET -> https://test.bit.blockpool.io/wallets/{ticker}/{walletuniqueidentifier}
+
+The walletuniqueidentifier can be either the unique id for the wallet or the clientforeignkey used to create the wallet
 					</code>
 				</pre>
 				<h3>Response</h3>
