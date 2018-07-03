@@ -127,7 +127,6 @@ router.post('/', (req, res) => {
     });
   }
   let comment = req.body.comment;
-  let textpayload = req.body.textpayload;
 
   hashTheCode(config.apiprivatekey)
   .then((apihashedkey) => {
@@ -144,8 +143,7 @@ router.post('/', (req, res) => {
         originwalletuniqueidentifier : originwalletuniqueidentifier,
         destinationwalletuniqueidentifier : destinationwalletuniqueidentifier,
         destinationaddress : destinationaddress,
-        destinationclientforeignkey : destinationclientforeignkey,
-        textpayload : textpayload
+        destinationclientforeignkey : destinationclientforeignkey
       }
     };
 

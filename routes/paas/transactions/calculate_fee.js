@@ -10,16 +10,15 @@ router.post('/', (req, res) => {
   let amount = req.body.amount;
   let originwalletuniqueidentifier = req.body.originwalletuniqueidentifier;
   let destinationwalletuniqueidentifier = req.body.destinationwalletuniqueidentifier;
+  let destinationclientforeignkey = req.body.destinationclientforeignkey;
   let destinationaddress = req.body.destinationaddress;
 
-  if (!ticker || !amount || !originwalletuniqueidentifier || (!destinationwalletuniqueidentifier && !destinationaddress)) {
+  if (!ticker || !amount || !originwalletuniqueidentifier || (!destinationwalletuniqueidentifier && !destinationaddress && !destinationclientforeignkey)) {
     return res.status(400).json({
       success : false,
       message : "missing required fields"
     });
   }
-
-  let textpayload = req.body.textpayload;
 
   handleBiTHeaders.hashKey(config.apiprivatekey)
   .then((apihashedkey) => {
@@ -35,7 +34,7 @@ router.post('/', (req, res) => {
         originwalletuniqueidentifier : originwalletuniqueidentifier,
         destinationwalletuniqueidentifier : destinationwalletuniqueidentifier,
         destinationaddress : destinationaddress,
-        textpayload : textpayload
+        destinationclientforeignkey : destinationclientforeignkey
       }
     };
 

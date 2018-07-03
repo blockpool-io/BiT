@@ -204,6 +204,14 @@ module.exports = router;
 				<pre class="align-left">
 					<code>
 GET -> https://test.bit.blockpool.io/transactions/{ticker}/list/{base64 Encoded Filter Object}
+
+filter object:
+{
+  walletuniqueidentifier : unique identifier of destination wallet (optional if adddress or clientforeignkey provided),
+  adddress : address to send funds to (optional if walletuniqueidentifier or clientforeignkey provided),
+  clientforeignkey : clientforeignkey used to create the destination address (optional if walletuniqueidentifier or adddress provided),
+  limit : optional limit on number of records returned (default to 50 if not set)
+}
 					</code>
 				</pre>
 				<h3>Response</h3>
