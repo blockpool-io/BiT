@@ -36,9 +36,9 @@
           <div class="field half">
             <label for="ticker">Currency</label>
               <select name="ticker" id="ticker">
-                <option value="BPL">Blockpool</option>
+                <option value="BPL" disabled>Blockpool</option>
                 <option value="BTC">Bitcoin</option>
-                <option value="WBX">WOOOBux</option>
+                <option value="WBX" disabled>WOOOBux</option>
                 <option value="ADC">Audiocoin</option>
               </select>
           </div>
@@ -162,24 +162,16 @@ GET -> https://test.bit.blockpool.io/transactions/{ticker}/{transactionid}
 					<code>
 {
   success: true,
-  wallets: [
-    {
-      currency: 'the ticker for the currency as a three letter code, lower case',
-      id: 'the wallet unique identifier'
-      siloLabel: 'the random string label for this account',
-      dateCreated: 'when the silo was created',
-      buckets: [] <- 'an empty array currently',
-      addresses: [] <- 'an array of addresses for the silo to be used for receiving addresses',
-      balance: {
-        confirmed: a float representing the available to spend balance of the silo,
-        unconfirmed: a float representing the unavailable to spend balance of the silo,
-        cachedDate: the date at which these numbers are valid,
-        hasErrors: true if an error occurred generating the balance,
-        errorMessage: contains an error message if there was an error,
-        transactionFee: a float representing the service fee for sending funds for this currency
-      }
-    }
-  ]
+  tramsaction: {
+    "transactionId": "the transaction id",
+    "currency": "ticker of the transaction",
+    "direction": "incoming / outgoing",
+    "amount": "string amount of transaction, to 8 Decimal Places",
+    "relevantAddress": "The address associated with you that is relevant to this transaction",
+    "confirmations": the number of confirmations this transaction has received,
+    "time": "UTC Date time",
+    "comment": "any comment on the transaction"
+  }
 }
 					</code>
 				</pre>
