@@ -220,14 +220,15 @@ filter object:
   {
     "success": true,
     "transactions": [{
-      "transactionId": "the transaction id",
+      "txid": "the transaction id",
       "currency": "ticker of the transaction",
       "direction": "incoming / outgoing",
       "amount": "string amount of transaction, to 8 Decimal Places",
       "relevantAddress": "The address associated with you that is relevant to this transaction",
       "confirmations": the number of confirmations this transaction has received,
       "time": "UTC Date time",
-      "comment": "any comment on the transaction"
+      "comment": "any comment on the transaction",
+      "blockhash": "the blockhash that contains this transaction"
     }]
   }
 					</code>

@@ -36,9 +36,9 @@
           <div class="field half">
             <label for="ticker">Currency</label>
               <select name="ticker" id="ticker">
-                <option value="BPL" disabled>Blockpool</option>
+                <option value="BPL">Blockpool</option>
                 <option value="BTC">Bitcoin</option>
-                <option value="WBX" disabled>WOOOBux</option>
+                <option value="WBX">WOOOBux</option>
                 <option value="ADC">Audiocoin</option>
               </select>
           </div>
@@ -163,14 +163,15 @@ GET -> https://test.bit.blockpool.io/transactions/{ticker}/{transactionid}
 {
   success: true,
   tramsaction: {
-    "transactionId": "the transaction id",
+    "txid": "the transaction id",
     "currency": "ticker of the transaction",
-    "direction": "incoming / outgoing",
     "amount": "string amount of transaction, to 8 Decimal Places",
-    "relevantAddress": "The address associated with you that is relevant to this transaction",
+    "sendingAddress": "The address that sent this transaction",
+    "receivingAddress": "The address that received this transaction",
     "confirmations": the number of confirmations this transaction has received,
     "time": "UTC Date time",
-    "comment": "any comment on the transaction"
+    "comment": "any comment on the transaction",
+    "blockhash": "the blockhash that contains this transaction"
   }
 }
 					</code>
