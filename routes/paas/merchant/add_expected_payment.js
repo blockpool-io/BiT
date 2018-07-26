@@ -8,13 +8,13 @@ const handleBiTHeaders = require('../../../headerhandler');
 router.post('/', (req, res) => {
   let ticker = req.body.ticker;
   let amount = req.body.amount;
-  let originwalletuniqueidentifier = req.body.originwalletuniqueidentifier;
+  let targetwalletuniqueidentifier = req.body.targetwalletuniqueidentifier;
   let clientForeignKey = req.body.clientForeignKey;
   let initialCallbackUrl = req.body.initialCallbackUrl;
   let confirmationCallbackUrl = req.body.confirmationCallbackUrl;
   let errorCallbackUrl = req.body.errorCallbackUrl;
 
-  if (!ticker || !amount || !originwalletuniqueidentifier || !clientForeignKey || !initialCallbackUrl || !confirmationCallbackUrl || !errorCallbackUrl) {
+  if (!ticker || !amount || !targetwalletuniqueidentifier || !clientForeignKey || !initialCallbackUrl || !confirmationCallbackUrl || !errorCallbackUrl) {
     return res.status(400).json({
       success : false,
       message : "missing required fields"
